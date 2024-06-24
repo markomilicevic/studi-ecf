@@ -5,6 +5,9 @@ install-dev:
 	# Install Website
 	cd website && npm install
 
+	# Install End2end testing
+	cd end2end && npm install
+
 start-dev:
 	# Start all Docker containers
 	docker-compose --file docker-compose-dev.yml up --detach
@@ -17,6 +20,12 @@ start-dev:
 
 	# Start Static (using simple python's http server)
 	cd static && nohup python3 -m http.server > ../static.log 2>&1 &
+
+run-end2end-tests:
+	# Check if dev env is running
+	curl -sSf http://localhost:4001/ > /dev/null
+	# Start end2end tests
+	cd end2end && npm test
 
 stop-dev:
 	# Stop all Docker containers
