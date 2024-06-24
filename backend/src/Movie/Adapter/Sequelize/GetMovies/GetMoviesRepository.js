@@ -38,7 +38,6 @@ export default class GetMoviesRepository {
 			const obj = new Movie();
 			obj.setMovieId(movie.movieId);
 			obj.setPosterId(movie.posterId);
-			obj.setGenreId(movie.genreId);
 			obj.setTitle(movie.title);
 			obj.setDescription(movie.description);
 			obj.setMinimalAge(movie.minimalAge);
