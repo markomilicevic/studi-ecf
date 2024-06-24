@@ -107,4 +107,93 @@ VALUES
 		LAST_WEDNESDAY_OR_TODAY()
 	);
 
+CREATE TABLE cinemas (
+	cinemaId UUID PRIMARY KEY,
+	cinemaName VARCHAR(255) NOT NULL,
+	countryCode CHAR(3) NOT NULL,
+	address TEXT NOT NULL,
+	phoneNumber VARCHAR(255) NOT NULL,
+	openingHours TEXT NOT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (cinemaName, unarchived)
+);
+
+INSERT INTO
+	cinemas (
+		cinemaId,
+		cinemaName,
+		countryCode,
+		address,
+		phoneNumber,
+		openingHours,
+		createdAt
+	)
+VALUES
+	(
+		'6343bc7c-bef9-4309-b6ee-483c823960a8',
+		'Cinéphoria Nantes',
+		'FRA',
+		'12 avenue Jean Jaurès, Nantes, France',
+		'+33612345678',
+		'Du mardi au dimanche : de 11h00 à 22h00',
+		NOW()
+	),
+	(
+		'748ff6f2-b362-48c1-8d18-6ab0ab9980c8',
+		'Cinéphoria Bordeaux',
+		'FRA',
+		'12 avenue Jean Jaurès, Bordeaux, France',
+		'+33612345678',
+		'Du mardi au dimanche : de 11h00 à 22h00',
+		NOW()
+	),
+	(
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'Cinéphoria Paris',
+		'FRA',
+		'12 avenue Jean Jaurès, Paris, France',
+		'+33612345678',
+		'Du mardi au dimanche : de 11h00 à 22h00',
+		NOW()
+	),
+	(
+		'971d416b-44eb-4d2c-8c8b-b3779eb4077d',
+		'Cinéphoria Toulouse',
+		'FRA',
+		'12 avenue Jean Jaurès, Toulouse, France',
+		'+33612345678',
+		'Du mardi au dimanche : de 11h00 à 22h00',
+		NOW()
+	),
+	(
+		'd325e37e-5272-4164-92b2-20812045bd7b',
+		'Cinéphoria Lille',
+		'FRA',
+		'12 avenue Jean Jaurès, Lille, France',
+		'+33612345678',
+		'Du mardi au dimanche : de 11h00 à 22h00',
+		NOW()
+	),
+	(
+		'09f3c5df-bbbe-4e55-bad1-3897be5b608a',
+		'Cinéphoria Charleroi',
+		'BEL',
+		'12 avenue Jean Jaurès, Charleroi, Belgique',
+		'+3212345678',
+		'Du mardi au dimanche : de 11h00 à 22h00',
+		NOW()
+	),
+	(
+		'6c84ac65-8876-40c2-9f59-4d88f8e266bb',
+		'Cinéphoria Liège',
+		'BEL',
+		'12 avenue Jean Jaurès, Liège, Belgique',
+		'+3212345678',
+		'Du mardi au dimanche : de 11h00 à 22h00',
+		NOW()
+	);
+
 COMMIT;
