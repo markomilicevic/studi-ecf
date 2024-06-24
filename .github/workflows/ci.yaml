@@ -58,3 +58,30 @@ jobs:
         run: cd website && npm install   
       - name: Build application
         run: cd website && npm run build
+      - name: Build Storybook
+        run: cd website && npm run build-storybook
+      - name: Upload dependencies
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-node-modules
+          path: website/node_modules
+
+  website-test:
+    needs: website-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: website-node-modules
+          path: website/node_modules
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: website/.nvmrc
+      - name: Test
+        run: cd website && npm test
+        env:
+          CI: true
