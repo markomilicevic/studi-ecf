@@ -196,4 +196,305 @@ VALUES
 		NOW()
 	);
 
+CREATE TABLE qualities (
+	qualityId UUID PRIMARY KEY,
+	qualityName ENUM('4DX', '3D', '4K', 'STD') NOT NULL DEFAULT 'STD',
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (qualityName, unarchived)
+);
+
+INSERT INTO
+	qualities (qualityId, qualityName, createdAt)
+VALUES
+	(
+		'b5f344e9-7968-4364-971c-9cacec0e90ea',
+		'4DX',
+		NOW()
+	),
+	(
+		'9298d94f-9186-4f50-957c-84719d96b2cc',
+		'3D',
+		NOW()
+	),
+	(
+		'54671b5f-75a9-4742-82c7-56cf2ffbc343',
+		'4K',
+		NOW()
+	),
+	(
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		'STD',
+		NOW()
+	);
+
+CREATE TABLE cinemas_rooms (
+	cinemaRoomId UUID PRIMARY KEY,
+	cinemaId UUID NOT NULL,
+	qualityId UUID NOT NULL,
+	roomNumber TINYINT(2) NOT NULL,
+	placementsMatrix TEXT NOT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (cinemaId, roomNumber, unarchived),
+	FOREIGN KEY (cinemaId) REFERENCES cinemas(cinemaId),
+	FOREIGN KEY (qualityId) REFERENCES qualities(qualityId)
+);
+
+INSERT INTO
+	cinemas_rooms (
+		cinemaRoomId,
+		cinemaId,
+		qualityId,
+		roomNumber,
+		placementsMatrix,
+		createdAt
+	)
+VALUES
+	(
+		'93214f9d-84d9-4f25-9917-efd195fc0be9',
+		'748ff6f2-b362-48c1-8d18-6ab0ab9980c8',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		1,
+		"SSS DDD\nSSS SSS",
+		NOW()
+	),
+	(
+		'22c65b73-c309-4a4b-84fa-d0942ee76ba4',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		1,
+		"SSS DDD\nSSS SSS",
+		NOW()
+	),
+	(
+		'04e4121c-79f7-41b6-b769-5d933ffed4e2',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		2,
+		"S D\nS D",
+		NOW()
+	),
+	(
+		'a3b16130-bffe-45fe-90f8-53063c830d68',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		3,
+		"S D\nS D",
+		NOW()
+	);
+
+
+CREATE TABLE sessions (
+	sessionId UUID PRIMARY KEY,
+	cinemaId UUID NOT NULL,
+	movieId UUID NOT NULL,
+	cinemaRoomId UUID NOT NULL,
+	startDate DATETIME NOT NULL,
+	endDate DATETIME DEFAULT NULL,
+	standartFreePlaces INT(11) NOT NULL,
+	disabledFreePlaces INT(11) NOT NULL,
+	qualityId UUID NOT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	FOREIGN KEY (cinemaId) REFERENCES cinemas(cinemaId),
+	FOREIGN KEY (movieId) REFERENCES movies(movieId),
+	FOREIGN KEY (cinemaRoomId) REFERENCES cinemas_rooms(cinemaRoomId)
+);
+
+INSERT INTO
+	sessions (
+		sessionId,
+		cinemaId,
+		movieId,
+		cinemaRoomId,
+		qualityId,
+		startDate,
+		endDate,
+		standartFreePlaces,
+		disabledFreePlaces,
+		createdAt
+	)
+VALUES
+	(
+		'88ad4c7c-4218-4d1e-a9d3-b842e8b12304',
+		'748ff6f2-b362-48c1-8d18-6ab0ab9980c8',
+		'b3efa1f5-7d09-4cc4-a3d2-d0792a667dd1',
+		'93214f9d-84d9-4f25-9917-efd195fc0be9',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		'2001-01-01 16:00:00',
+		'2001-01-01 18:00:00',
+		0,
+		0,
+		'2000-12-24 10:00:00'
+	),
+	(
+		'857e81c2-a02b-4563-aebc-b3063d50431a',
+		'748ff6f2-b362-48c1-8d18-6ab0ab9980c8',
+		'b3efa1f5-7d09-4cc4-a3d2-d0792a667dd1',
+		'93214f9d-84d9-4f25-9917-efd195fc0be9',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		NOW() + INTERVAL 6 HOUR,
+		NOW() + INTERVAL 8 HOUR,
+		100,
+		10,
+		NOW()
+	),
+	(
+		'29969f77-5a36-4046-a0f7-0bcf7263cc8f',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'b3efa1f5-7d09-4cc4-a3d2-d0792a667dd1',
+		'22c65b73-c309-4a4b-84fa-d0942ee76ba4',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		NOW() + INTERVAL 6 HOUR,
+		NOW() + INTERVAL 8 HOUR,
+		100,
+		10,
+		NOW()
+	),
+	(
+		'c932e1ff-cdd6-4709-8d63-d4bbf02ef552',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'b3efa1f5-7d09-4cc4-a3d2-d0792a667dd1',
+		'22c65b73-c309-4a4b-84fa-d0942ee76ba4',
+		'54671b5f-75a9-4742-82c7-56cf2ffbc343',
+		NOW() + INTERVAL 9 HOUR,
+		NOW() + INTERVAL 11 HOUR,
+		2,
+		1,
+		NOW()
+	),
+	(
+		'98eedd1b-61fd-4314-8b54-64af0dbfbc87',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'b3efa1f5-7d09-4cc4-a3d2-d0792a667dd1',
+		'04e4121c-79f7-41b6-b769-5d933ffed4e2',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		NOW() + INTERVAL 25 HOUR,
+		NOW() + INTERVAL 27 HOUR,
+		100,
+		10,
+		NOW()
+	),
+	(
+		'ffd55c72-bc1f-4826-afd9-af79197e75ac',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'77aca143-4630-4615-a1cd-a8e3c59db32e',
+		'22c65b73-c309-4a4b-84fa-d0942ee76ba4',
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		NOW() + INTERVAL 5 HOUR,
+		NOW() + INTERVAL 7 HOUR,
+		100,
+		10,
+		NOW()
+	),
+	(
+		'7228c993-a748-4de9-b435-b8ea52bc5b80',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'b87a3c4e-91f4-415f-9f69-763f3ab71dd9',
+		'a3b16130-bffe-45fe-90f8-53063c830d68',
+		'9298d94f-9186-4f50-957c-84719d96b2cc',
+		NOW() + INTERVAL 9 DAY,
+		NOW() + INTERVAL 9 DAY + INTERVAL 2 HOUR,
+		100,
+		10,
+		NOW()
+	),
+	(
+		'4af1e73a-5be5-489b-85a6-d32d901effa0',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		'b87a3c4e-91f4-415f-9f69-763f3ab71dd9',
+		'a3b16130-bffe-45fe-90f8-53063c830d68',
+		'9298d94f-9186-4f50-957c-84719d96b2cc',
+		NOW() + INTERVAL 9 + 7 + 7 DAY,
+		NOW() + INTERVAL 9 + 7 + 7 DAY + INTERVAL 2 HOUR,
+		100,
+		10,
+		NOW()
+	);
+
+CREATE TABLE prices (
+	qualityId UUID NOT NULL,
+	countryCode CHAR(3) NOT NULL,
+	priceValue DECIMAL(5, 2) NOT NULL,
+	priceUnit ENUM('EUR') NOT NULL DEFAULT 'EUR',
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (qualityId, countryCode, unarchived),
+	FOREIGN KEY (qualityId) REFERENCES qualities(qualityId)
+);
+
+INSERT INTO
+	prices (
+		qualityId,
+		countryCode,
+		priceValue,
+		priceUnit,
+		createdAt
+	)
+VALUES
+	(
+		'b5f344e9-7968-4364-971c-9cacec0e90ea',
+		'FRA',
+		14.99,
+		'EUR',
+		NOW()
+	),
+	(
+		'9298d94f-9186-4f50-957c-84719d96b2cc',
+		'FRA',
+		13.99,
+		'EUR',
+		NOW()
+	),
+	(
+		'54671b5f-75a9-4742-82c7-56cf2ffbc343',
+		'FRA',
+		12.99,
+		'EUR',
+		NOW()
+	),
+	(
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		'FRA',
+		11.99,
+		'EUR',
+		NOW()
+	),
+	(
+		'b5f344e9-7968-4364-971c-9cacec0e90ea',
+		'BEL',
+		14.99,
+		'EUR',
+		NOW()
+	),
+	(
+		'9298d94f-9186-4f50-957c-84719d96b2cc',
+		'BEL',
+		13.99,
+		'EUR',
+		NOW()
+	),
+	(
+		'54671b5f-75a9-4742-82c7-56cf2ffbc343',
+		'BEL',
+		12.99,
+		'EUR',
+		NOW()
+	),
+	(
+		'25d69489-4384-4494-9852-0c63feca08a2',
+		'BEL',
+		11.99,
+		'EUR',
+		NOW()
+	);
+
 COMMIT;

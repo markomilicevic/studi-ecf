@@ -5,6 +5,7 @@ import cors from "cors";
 
 import { loadCinemaRoutes } from "./src/Cinema/routes.js";
 import { loadMovieRoutes } from "./src/Movie/routes.js";
+import { loadSessionRoutes } from "./src/Session/routes.js";
 
 (async () => {
 	const app = express();
@@ -24,6 +25,7 @@ import { loadMovieRoutes } from "./src/Movie/routes.js";
 
 	loadCinemaRoutes(app);
 	loadMovieRoutes(app);
+	loadSessionRoutes(app);
 
 	app.listen(port, () => {
 		console.log(`Server is running on http://localhost:${port}`);
