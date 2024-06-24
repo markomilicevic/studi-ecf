@@ -3,6 +3,7 @@ import "./env.js";
 import express from "express";
 import cors from "cors";
 
+import { loadCinemaRoutes } from "./src/Cinema/routes.js";
 import { loadMovieRoutes } from "./src/Movie/routes.js";
 
 (async () => {
@@ -21,6 +22,7 @@ import { loadMovieRoutes } from "./src/Movie/routes.js";
 		res.status(200).json({ ok: true });
 	});
 
+	loadCinemaRoutes(app);
 	loadMovieRoutes(app);
 
 	app.listen(port, () => {
