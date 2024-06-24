@@ -418,6 +418,30 @@ VALUES
 		NOW()
 	);
 
+CREATE TABLE sessions_reserved_placements(
+	sessionId UUID NOT NULL,
+	-- TODO: Remove me in favor of booking.sessionId
+	placementNumber INT(11) NOT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (sessionId, placementNumber, unarchived)
+);
+
+INSERT INTO
+	sessions_reserved_placements (
+		sessionId,
+		placementNumber,
+		createdAt
+	)
+VALUES
+	(
+		'88ad4c7c-4218-4d1e-a9d3-b842e8b12304',
+		3,
+		NOW()
+	);
+
 CREATE TABLE prices (
 	qualityId UUID NOT NULL,
 	countryCode CHAR(3) NOT NULL,
