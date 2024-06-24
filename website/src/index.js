@@ -13,6 +13,7 @@ import { Contact } from "components/pages/Contact";
 import { HomePage } from "components/pages/HomePage";
 import { Movies } from "components/pages/Movies";
 import { BannerProvider } from "components/templates/Page/providers/BannerProvider";
+import { CurrentCinemaProvider } from "components/templates/Page/providers/CurrentCinemaProvider";
 import Snackbar, { SnackbarUtilsConfigurator } from "services/utils/snackbar.js";
 
 import reportWebVitals from "./reportWebVitals";
@@ -73,10 +74,12 @@ root.render(
 			<SnackbarUtilsConfigurator />
 			<QueryClientProvider client={queryClient}>
 				<BannerProvider>
-					<ThemeProvider theme={theme}>
-						<CssBaseline />
-						<RouterProvider router={router} />
-					</ThemeProvider>
+					<CurrentCinemaProvider>
+						<ThemeProvider theme={theme}>
+							<CssBaseline />
+							<RouterProvider router={router} />
+						</ThemeProvider>
+					</CurrentCinemaProvider>
 				</BannerProvider>
 			</QueryClientProvider>
 		</SnackbarProvider>
