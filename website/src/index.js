@@ -1,6 +1,8 @@
 import CssBaseline from "@mui/material/CssBaseline";
 import { ThemeProvider } from "@mui/material/styles";
 import axios from "axios";
+import moment from "moment";
+import "moment/locale/fr";
 import { SnackbarProvider } from "notistack";
 import React from "react";
 import ReactDOM from "react-dom/client";
@@ -18,6 +20,8 @@ import Snackbar, { SnackbarUtilsConfigurator } from "services/utils/snackbar.js"
 
 import reportWebVitals from "./reportWebVitals";
 import theme from "./theme";
+
+moment.locale("fr");
 
 const queryClient = new QueryClient({
 	defaultOptions: {
