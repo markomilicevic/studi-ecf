@@ -1,0 +1,21 @@
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+      - staging
+
+jobs:
+  website-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: website/.nvmrc
+      - name: Install dependencies
+        run: cd website && npm install   
+      - name: Build application
+        run: cd website && npm run build
