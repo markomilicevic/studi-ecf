@@ -15,6 +15,9 @@ start-dev:
 	# Start Website (with create-react-app's watch)
 	cd website && nohup npm start > ../website.log 2>&1 &
 
+	# Start Static (using simple python's http server)
+	cd static && nohup python3 -m http.server > ../static.log 2>&1 &
+
 stop-dev:
 	# Stop all Docker containers
 	docker-compose --file docker-compose-dev.yml down || true

@@ -74,3 +74,15 @@ header {
 	width: 100%;
 	min-height: 100vh;
 }
+
+.MuiCard-root {
+	box-shadow:
+		-10px 0px 13px -7px #000000,
+		10px 0px 13px -7px #000000,
+		5px 5px 50px 24px rgba(0, 0, 0, 0.05) !important;
+		transition: opacity 0.50s;
+}
+
+.MuiCard-root a {
+	text-decoration: none;
+}
