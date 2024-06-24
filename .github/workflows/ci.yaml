@@ -6,6 +6,45 @@ on:
       - staging
 
 jobs:
+  backend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: backend/.nvmrc
+      - name: Install dependencies
+        run: cd backend && npm install 
+      - name: Upload dependencies
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-node-modules
+          path: backend/node_modules
+
+  backend-test:
+    needs: backend-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-node-modules
+          path: backend/node_modules
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: backend/.nvmrc
+      - name: Lint
+        run: cd backend && npm run lint
+      - name: Test
+        run: cd backend && npm test
+        env:
+          CI: true
+
   website-build:
     runs-on: ubuntu-latest
     steps:
