@@ -508,26 +508,69 @@ VALUES
 		NOW()
 	);
 
+CREATE TABLE bookings (
+	bookingId UUID PRIMARY KEY,
+	userId UUID NOT NULL,
+	sessionId UUID NOT NULL,
+	movieId UUID NOT NULL,
+	totalPlacesNumber INTEGER(11) NOT NULL,
+	totalPriceValue DECIMAL(5, 2) NOT NULL,
+	totalPriceUnit ENUM('EUR') NOT NULL DEFAULT 'EUR',
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	FOREIGN KEY (userId) REFERENCES users(userId),
+	FOREIGN KEY (sessionId) REFERENCES sessions(sessionId),
+	FOREIGN KEY (movieId) REFERENCES movies(movieId)
+);
+
+INSERT INTO
+	bookings (
+		bookingId,
+		userId,
+		sessionId,
+		movieId,
+		totalPlacesNumber,
+		totalPriceValue,
+		totalPriceUnit,
+		createdAt
+	)
+VALUES
+	(
+		'0fc14dd2-1eeb-4472-9572-28286d50fd3d',
+		'50601073-b3e4-4772-a444-cbeff5c82b45',
+		'88ad4c7c-4218-4d1e-a9d3-b842e8b12304',
+		'b3efa1f5-7d09-4cc4-a3d2-d0792a667dd1',
+		1,
+		19.90,
+		'EUR',
+		'2000-12-28 15:00:00.000'
+	);
+
 CREATE TABLE sessions_reserved_placements(
 	sessionId UUID NOT NULL,
 	-- TODO: Remove me in favor of booking.sessionId
+	bookingId UUID NOT NULL,
 	placementNumber INT(11) NOT NULL,
 	createdAt DATETIME NOT NULL,
 	updatedAt DATETIME DEFAULT NULL,
 	deletedAt DATETIME DEFAULT NULL,
 	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
-	UNIQUE KEY (sessionId, placementNumber, unarchived)
+	UNIQUE KEY (sessionId, placementNumber, unarchived),
+	FOREIGN KEY (bookingId) REFERENCES bookings(bookingId)
 );
 
 INSERT INTO
 	sessions_reserved_placements (
 		sessionId,
+		bookingId,
 		placementNumber,
 		createdAt
 	)
 VALUES
 	(
 		'88ad4c7c-4218-4d1e-a9d3-b842e8b12304',
+		'0fc14dd2-1eeb-4472-9572-28286d50fd3d',
 		3,
 		NOW()
 	);
