@@ -1,5 +1,12 @@
 import { Page } from "components/templates/Page";
+import { AccountForm } from "components/organisms/AccountForm";
 
 export default function Account() {
-	return <Page data-testid="account">Account</Page>;
+	const connect = () => {};
+
+	return (
+		<Page data-testid="account">
+			<AccountForm connect={connect} />
+		</Page>
+	);
 }
