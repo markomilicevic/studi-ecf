@@ -1,9 +1,10 @@
 import Button from "@mui/material/Button";
 import axios from "axios";
 import { useContext, useEffect, useState } from "react";
-import { useQuery } from "react-query";
+import { useMutation, useQuery } from "react-query";
 import { useLocation } from "react-router-dom";
 
+import { AccountForm } from "components/organisms/AccountForm";
 import { CinemaList } from "components/organisms/CinemaList";
 import { MovieListDropdown } from "components/organisms/MovieListDropdown";
 import { Placements } from "components/organisms/Placements";
@@ -11,6 +12,7 @@ import { PlacesNumber } from "components/organisms/PlacesNumber";
 import { WeeklySessionList } from "components/organisms/WeeklySessionList";
 import { Page } from "components/templates/Page";
 import { CurrentCinemaContext } from "components/templates/Page/providers/CurrentCinemaProvider.js";
+import { CurrentUserContext } from "components/templates/Page/providers/CurrentUserProvider";
 import { groupSessionsByDay } from "services/utils/sessions";
 
 // TODO: Adapt this to the P95 of number of places by booking
@@ -69,8 +71,22 @@ const retrieveBookingVerify = async ({ sessionId, choicedPlaces }) => {
 	return response.data;
 };
 
+const submitBook = async ({ sessionId, movieId, choicedPlaces, expectedTotalPriceValue, expectedTotalPriceUnit }) => {
+	return await axios.post(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/v1/booking`, {
+		sessionId,
+		movieId,
+		choicedPlaces,
+		expectedTotalPriceValue,
+		expectedTotalPriceUnit,
+	});
+};
+
 export default function Booking() {
+	const { flag, isConnected } = useContext(CurrentUserContext);
+
 	let location = useLocation();
+
+	const [isBookingConfirmed, setIsBookingConfirmed] = useState(false);
 
 	const [booking, setBooking] = useState({
 		cinema: null,
@@ -108,6 +124,10 @@ export default function Booking() {
 			choicedPlaces: booking.placements.choicedPlaces.length === booking.placements.totalPlacesNumber ? booking.placements.choicedPlaces : 0,
 		})
 	);
+
+	const book = useMutation({
+		mutationFn: submitBook,
+	});
 
 	useEffect(() => {
 		if (cinema) {
@@ -165,6 +185,16 @@ export default function Booking() {
 	}
 	if (cinemasIsLoading || moviesIsLoading) {
 		return <Page>Chargement...</Page>;
+	}
+
+	if (isBookingConfirmed) {
+		return (
+			<Page>
+				<div style={{ textAlign: "center" }}>
+					<strong>Votre réservation est confirmé ! À très bientôt à votre séance</strong>
+				</div>
+			</Page>
+		);
 	}
 
 	const stepChooseCinemaElm = (
@@ -279,12 +309,44 @@ export default function Booking() {
 
 	let stepSeePriceElm;
 	if (bookVerifyData) {
+		const finalize = () => {
+			flag(); // Create client's flag
+
+			book.mutate(
+				{
+					sessionId: booking.session?.sessionId,
+					movieId: booking.movie?.movieId,
+					choicedPlaces: booking.placements.choicedPlaces,
+					expectedTotalPriceValue: bookVerifyData.data?.totalPriceValue,
+					expectedTotalPriceUnit: bookVerifyData.data?.totalPriceUnit,
+				},
+				{
+					onSuccess: () => {
+						setIsBookingConfirmed(true);
+					},
+				}
+			);
+		};
+
 		stepSeePriceElm = (
 			<div data-testid="booking-finalize">
 				<h2>Prix total</h2>
 				<div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 40 }}>
 					Total: {bookVerifyData.data?.totalPriceValue} {bookVerifyData.data?.totalPriceUnit}
 				</div>
+
+				{!isConnected ? (
+					<>
+						<h2>Inscrivez-vous ou connectez-vous pour finalisation la réservation</h2>
+						<AccountForm connect={finalize} />
+					</>
+				) : (
+					<div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: 40 }}>
+						<Button variant="contained" onClick={finalize}>
+							Payer
+						</Button>
+					</div>
+				)}
 			</div>
 		);
 	}
