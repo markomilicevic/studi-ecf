@@ -5,17 +5,14 @@ import { SequelizeFactory } from "../../../Common/Utils/sequelize.js";
 export default SequelizeFactory.getInstance()
 	.getSequelize()
 	.define(
-		"session",
+		"genre",
 		{
-			sessionId: {
+			genreId: {
 				primaryKey: true,
 				type: DataTypes.UUID,
 			},
-			cinemaId: {
-				type: DataTypes.UUID,
-			},
-			movieId: {
-				type: DataTypes.UUID,
+			genreName: {
+				type: DataTypes.STRING,
 			},
 		},
 		{

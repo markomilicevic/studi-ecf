@@ -7,6 +7,10 @@ export default class Movie {
 		this.posterId = posterId;
 	}
 
+	setGenreId(genreId) {
+		this.genreId = genreId;
+	}
+
 	setTitle(title) {
 		this.title = title;
 	}

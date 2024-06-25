@@ -1,10 +1,16 @@
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 import CardMedia from "@mui/material/CardMedia";
-import Typography from "@mui/material/Typography";
 import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import { useState } from "react";
+
+import { MovieModal } from "components/organisms/MovieModal";
 
 export default function MovieListCard({ data, error = false, isLoading = false }) {
+	const [movieModalOpened, setMovieModalOpened] = useState(false);
+	const [selectedMovie, setSelectedMovie] = useState();
+
 	if (isLoading) {
 		return "...";
 	}
@@ -25,6 +31,8 @@ export default function MovieListCard({ data, error = false, isLoading = false }
 								href="/movies"
 								onClick={(event) => {
 									event.preventDefault();
+									setSelectedMovie(movie);
+									setMovieModalOpened(true);
 								}}
 							>
 								<CardMedia
@@ -69,6 +77,15 @@ export default function MovieListCard({ data, error = false, isLoading = false }
 					</Grid>
 				))}
 			</Grid>
+			{movieModalOpened && selectedMovie && (
+				<MovieModal
+					movie={selectedMovie}
+					onClose={() => {
+						setMovieModalOpened(false);
+						setSelectedMovie(null);
+					}}
+				/>
+			)}
 		</>
 	);
 }
