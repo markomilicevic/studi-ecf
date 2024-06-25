@@ -12,3 +12,19 @@ services:
             MYSQL_PASSWORD: mypassword
         ports:
             - "3306:3306"
+
+    analytics:
+        image: elasticsearch:8.14.0
+        ports:
+            - 9200:9200
+            - 9300:9300
+        environment:
+            discovery.type: single-node
+            xpack.security.enabled: 'false'
+
+    analytics-init:
+        build: analytics
+        links:
+            - analytics
+        depends_on:
+            - analytics
