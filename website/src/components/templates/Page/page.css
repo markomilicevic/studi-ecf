@@ -85,9 +85,22 @@ footer {
 		-10px 0px 13px -7px #000000,
 		10px 0px 13px -7px #000000,
 		5px 5px 50px 24px rgba(0, 0, 0, 0.05) !important;
-		transition: opacity 0.50s;
+	transition: opacity 0.5s;
 }
 
 .MuiCard-root a {
 	text-decoration: none;
+}
+
+.modal.MuiModal-root {
+	margin: 40px;
+	overflow: auto;
+}
+
+.modal.MuiModal-root > .MuiBox-root {
+	padding: 40px;
+}
+
+.MuiCheckbox-root.Mui-disabled * {
+	color: rgba(255, 255, 255, 0.3);
 }

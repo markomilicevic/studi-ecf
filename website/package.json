@@ -6,6 +6,7 @@
 		"@emotion/react": "^11.11.4",
 		"@emotion/styled": "^11.11.5",
 		"@mui/material": "^5.15.20",
+		"@mui/x-date-pickers": "^7.7.1",
 		"@testing-library/jest-dom": "^5.17.0",
 		"@testing-library/react": "^13.4.0",
 		"@testing-library/user-event": "^13.5.0",
@@ -26,8 +27,8 @@
 		"build": "react-scripts build",
 		"test": "node --experimental-vm-modules ./node_modules/react-scripts/bin/react-scripts.js test",
 		"eject": "react-scripts eject",
-    "storybook": "storybook dev -p 6006",
-    "build-storybook": "storybook build"
+		"storybook": "storybook dev -p 6006",
+		"build-storybook": "storybook build"
 	},
 	"eslintConfig": {
 		"extends": [
