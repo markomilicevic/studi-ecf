@@ -8,6 +8,7 @@ import { loadCinemaRoutes } from "./src/Cinema/routes.js";
 import { loadGenreRoutes } from "./src/Genre/routes.js";
 import { loadMovieRoutes } from "./src/Movie/routes.js";
 import { loadSessionRoutes } from "./src/Session/routes.js";
+import { loadUserRoutes } from "./src/User/routes.js";
 
 (async () => {
 	const app = express();
@@ -43,6 +44,7 @@ import { loadSessionRoutes } from "./src/Session/routes.js";
 	loadGenreRoutes(app);
 	loadMovieRoutes(app);
 	loadSessionRoutes(app);
+	loadUserRoutes(app);
 
 	app.listen(port, () => {
 		console.log(`Server is running on http://localhost:${port}`);
