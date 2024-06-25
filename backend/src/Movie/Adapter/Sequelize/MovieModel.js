@@ -1,8 +1,10 @@
 import { DataTypes } from "@sequelize/core";
 
 import { SequelizeFactory } from "../../../Common/Utils/sequelize.js";
+import MovieCommentModel from "./MovieCommentModel.js";
+import SessionModel from "./SessionModel.js";
 
-export default SequelizeFactory.getInstance()
+const model = SequelizeFactory.getInstance()
 	.getSequelize()
 	.define(
 		"movie",
@@ -12,6 +14,9 @@ export default SequelizeFactory.getInstance()
 				type: DataTypes.UUID,
 			},
 			posterId: {
+				type: DataTypes.UUID,
+			},
+			genreId: {
 				type: DataTypes.UUID,
 			},
 			title: {
@@ -40,3 +45,8 @@ export default SequelizeFactory.getInstance()
 			paranoid: true,
 		}
 	);
+
+model.hasMany(SessionModel, { foreignKey: "movieId" });
+model.hasMany(MovieCommentModel, { foreignKey: "movieId" });
+
+export default model;

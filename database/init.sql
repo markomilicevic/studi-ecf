@@ -449,6 +449,65 @@ VALUES
 		NOW()
 	);
 
+CREATE TABLE users (
+	userId UUID PRIMARY KEY,
+	email VARCHAR(255) NOT NULL,
+	password CHAR(64) NOT NULL,
+	firstName VARCHAR(255) NOT NULL,
+	lastName VARCHAR(255) NOT NULL,
+	userName VARCHAR(255) NOT NULL,
+	role ENUM('user', 'employee', 'admin') NOT NULL DEFAULT 'user',
+	resetPasswordToken UUID DEFAULT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (email, unarchived)
+);
+
+INSERT INTO
+	users (
+		userId,
+		email,
+		password,
+		firstName,
+		lastName,
+		userName,
+		role,
+		createdAt
+	)
+VALUES
+	(
+		'2299bf64-58f5-44bf-b255-398f42595ead',
+		'admin@example.com',
+		'8c6976e5b5410415bde908bd4dee15dfb167a9c873fc4bb8a81f6f2ab448a918',
+		'Admin',
+		'Strator',
+		'admin',
+		'admin',
+		NOW()
+	),
+	(
+		'81d50ad7-310d-4eef-a738-62adb5a5ffed',
+		'employee@example.com',
+		'2fdc0177057d3a5c6c2c0821e01f4fa8d90f9a3bb7afd82b0db526af98d68de8',
+		'Empl',
+		'Oyee',
+		'employee',
+		'employee',
+		NOW()
+	),
+	(
+		'50601073-b3e4-4772-a444-cbeff5c82b45',
+		'john.doe@example.com',
+		'30f69670bba25e88a97e749a67b8b93db6541ebd309094e5ad0e3c56e7cc3961',
+		'John',
+		'Doe',
+		'john.doe',
+		'user',
+		NOW()
+	);
+
 CREATE TABLE sessions_reserved_placements(
 	sessionId UUID NOT NULL,
 	-- TODO: Remove me in favor of booking.sessionId
@@ -550,6 +609,44 @@ VALUES
 		11.99,
 		'EUR',
 		NOW()
+	);
+
+CREATE TABLE movies_comments (
+	movieCommentId UUID PRIMARY KEY,
+	movieId UUID NOT NULL,
+	sessionId UUID NOT NULL,
+	userId UUID NOT NULL,
+	comment TEXT NOT NULL,
+	status ENUM('created', 'approved', 'rejected') NOT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (sessionId, userId, unarchived),
+	FOREIGN KEY (movieId) REFERENCES movies(movieId),
+	FOREIGN KEY (sessionId) REFERENCES sessions(sessionId),
+	FOREIGN KEY (userId) REFERENCES users(userId)
+);
+
+INSERT INTO
+	movies_comments (
+		movieCommentId,
+		movieId,
+		sessionId,
+		userId,
+		comment,
+		status,
+		createdAt
+	)
+VALUES
+	(
+		'b9ab7ed9-fc2d-41fb-b014-f6f869b7bb89',
+		'b3efa1f5-7d09-4cc4-a3d2-d0792a667dd1',
+		'88ad4c7c-4218-4d1e-a9d3-b842e8b12304',
+		'50601073-b3e4-4772-a444-cbeff5c82b45',
+		'Très bon film !',
+		'created',
+		'2001-01-05 09:00:00.000'
 	);
 
 COMMIT;
