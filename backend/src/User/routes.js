@@ -28,6 +28,17 @@ export const loadUserRoutes = (app) => {
 		}
 	});
 
+	app.delete("/api/v1/users/auth", async (req, res) => {
+		try {
+			res.clearCookie("token");
+
+			res.status(200).json({ success: true });
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
 	app.post("/api/v1/users", async (req, res) => {
 		try {
 			if (req.me) {
