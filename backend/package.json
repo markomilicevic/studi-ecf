@@ -11,6 +11,7 @@
 	"author": "",
 	"license": "ISC",
 	"dependencies": {
+		"@elastic/elasticsearch": "^8.14.0",
 		"@sequelize/core": "^7.0.0-alpha.37",
 		"axios": "^1.7.2",
 		"cookie-parser": "^1.4.6",
