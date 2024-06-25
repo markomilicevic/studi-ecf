@@ -39,8 +39,33 @@ END//
 
 DELIMITER ;
 
+CREATE TABLE genres (
+	genreId UUID PRIMARY KEY,
+	genreName ENUM('sci-fi', 'comedy') NOT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (genreName, unarchived)
+);
+
+INSERT INTO
+	genres (genreId, genreName, createdAt)
+VALUES
+	(
+		'0476dcd7-ca7a-463a-a4d4-a72e5354293e',
+		'sci-fi',
+		NOW()
+	),
+	(
+		'ff423729-892d-4042-8879-b1e37084bee2',
+		'comedy',
+		NOW()
+	);
+
 CREATE TABLE movies (
 	movieId UUID PRIMARY KEY,
+	genreId UUID NOT NULL,
 	posterId UUID NOT NULL,
 	title VARCHAR(255) NOT NULL,
 	description TEXT NOT NULL,
@@ -51,12 +76,14 @@ CREATE TABLE movies (
 	updatedAt DATETIME DEFAULT NULL,
 	deletedAt DATETIME DEFAULT NULL,
 	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
-	UNIQUE KEY (title, unarchived)
+	UNIQUE KEY (title, unarchived),
+	FOREIGN KEY (genreId) REFERENCES genres(genreId)
 );
 
 INSERT INTO
 	movies (
 		movieId,
+		genreId,
 		posterId,
 		title,
 		description,
@@ -68,6 +95,7 @@ INSERT INTO
 VALUES
 	(
 		'b3efa1f5-7d09-4cc4-a3d2-d0792a667dd1',
+		'0476dcd7-ca7a-463a-a4d4-a72e5354293e',
 		'7aaece02-f35c-48f9-acae-2f934e75f86f',
 		'Terminator',
 		'Terminator (The Terminator) est un film de science-fiction américain réalisé par James Cameron et sorti en 1984. Il met en scène Arnold Schwarzenegger, Michael Biehn et Linda Hamilton dans les rôles principaux.',
@@ -78,6 +106,7 @@ VALUES
 	),
 	(
 		'b87a3c4e-91f4-415f-9f69-763f3ab71dd9',
+		'0476dcd7-ca7a-463a-a4d4-a72e5354293e',
 		'3f8fcade-fe3e-49a7-84cb-f73824b64779',
 		'Terminator 2 : Le Jugement dernier',
 		'Terminator 2 : Le Jugement dernier (Terminator 2: Judgment Day) est un film de science-fiction américain réalisé par James Cameron et sorti en 1991. Il met en scène Arnold Schwarzenegger, Linda Hamilton, Robert Patrick et Edward Furlong dans les rôles principaux.',
@@ -88,6 +117,7 @@ VALUES
 	),
 	(
 		'86c5d353-5846-41af-856c-fcb5a286f84c',
+		'0476dcd7-ca7a-463a-a4d4-a72e5354293e',
 		'6a81235e-6423-4d8b-9cf8-269bb32f1416',
 		'Terminator 3 : Le Soulèvement des machines',
 		'Terminator 3 : Le Soulèvement des machines ou Terminator 3 : La Guerre des machines au Québec (Terminator 3: Rise of the Machines) est un film américain de science-fiction réalisé par Jonathan Mostow, sorti en 2003.',
@@ -98,6 +128,7 @@ VALUES
 	),
 	(
 		'77aca143-4630-4615-a1cd-a8e3c59db32e',
+		'ff423729-892d-4042-8879-b1e37084bee2',
 		'07dc4159-57ca-4d09-bf91-c168fa7a84d2',
 		'Un jour sans fin',
 		'Un jour sans fin (Groundhog Day), ou Le Jour de la marmotte au Québec, est une comédie romantique et fantastique américaine réalisée par Harold Ramis, écrite par Danny Rubin, et sortie en 1993.',

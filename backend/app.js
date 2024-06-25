@@ -5,6 +5,7 @@ import express from "express";
 
 import { loadBookingRoutes } from "./src/Booking/routes.js";
 import { loadCinemaRoutes } from "./src/Cinema/routes.js";
+import { loadGenreRoutes } from './src/Genre/routes.js';
 import { loadMovieRoutes } from "./src/Movie/routes.js";
 import { loadSessionRoutes } from "./src/Session/routes.js";
 
@@ -26,6 +27,7 @@ import { loadSessionRoutes } from "./src/Session/routes.js";
 
 	loadBookingRoutes(app);
 	loadCinemaRoutes(app);
+	loadGenreRoutes(app);
 	loadMovieRoutes(app);
 	loadSessionRoutes(app);
 
