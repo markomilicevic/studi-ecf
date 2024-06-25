@@ -7,8 +7,27 @@ import SignupRepository from "./Adapter/Sequelize/Signup/SignupRepository.js";
 import SignupEmailRepository from "./Adapter/Smtp/Signup/SignupEmailRepository.js";
 import SigninService from "./UseCase/Signin/SigninService.js";
 import SignupService from "./UseCase/Signup/SignupService.js";
+import Response from "../Common/Utils/Response.js";
 
 export const loadUserRoutes = (app) => {
+	app.get("/api/v1/users/me", async (req, res) => {
+		try {
+			if (!req.me) {
+				return res.status(401).json({ error: true });
+			}
+			const response = new Response();
+			// Expose only the minimal number of information
+			response.setData({
+				userName: req.me.userName,
+				role: req.me.role,
+			});
+			res.status(200).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
 	app.post("/api/v1/users", async (req, res) => {
 		try {
 			if (req.me) {
