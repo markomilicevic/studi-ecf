@@ -1,12 +1,15 @@
 import GetSessionController from "./Adapter/Http/GetSession/GetSessionController.js";
 import GetSessionsController from "./Adapter/Http/GetSessions/GetSessionsController.js";
+import UpdateSessionController from "./Adapter/Http/UpdateSession/UpdateSessionController.js";
 import GetSessionRepository from "./Adapter/Sequelize/GetSession/GetSessionRepository.js";
 import GetSessionReservedPlacementRepository from "./Adapter/Sequelize/GetSession/GetSessionReservedPlacementRepository.js";
 import GetSessionsCinemasRepository from "./Adapter/Sequelize/GetSessions/GetSessionsCinemasRepository.js";
 import GetSessionsPricesRepository from "./Adapter/Sequelize/GetSessions/GetSessionsPricesRepository.js";
 import GetSessionsRepository from "./Adapter/Sequelize/GetSessions/GetSessionsRepository.js";
+import UpdateSessionRepository from "./Adapter/Sequelize/UpdateSession/UpdateSessionRepository.js";
 import GetSessionService from "./UseCase/GetSession/GetSessionService.js";
 import GetSessionsService from "./UseCase/GetSessions/GetSessionsService.js";
+import UpdateSessionService from "./UseCase/UpdateSession/UpdateSessionService.js";
 
 export const loadSessionRoutes = (app) => {
 	app.get("/api/v1/sessions", async (req, res) => {
@@ -33,6 +36,27 @@ export const loadSessionRoutes = (app) => {
 				sessionId: req.params.sessionId,
 			});
 			res.status(200).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.put("/api/v1/sessions/:sessionId", async (req, res) => {
+		try {
+			if (!req.me || !["admin", "employee"].includes(req.me.role)) {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new UpdateSessionController(null, new UpdateSessionService(new UpdateSessionRepository()));
+			const response = await controller.handle({ ...req.body, sessionId: req.params.sessionId });
+
+			let code = 204; // No content
+			if (response.status === "USER_ERRORS") {
+				code = 400; // Bad request
+			}
+
+			res.status(code).json(response);
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ error: true });
