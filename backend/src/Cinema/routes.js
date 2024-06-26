@@ -54,4 +54,19 @@ export const loadCinemaRoutes = (app) => {
 			res.status(500).json({ error: true });
 		}
 	});
+
+	app.get("/api/v1/cinemas/rooms", async (req, res) => {
+		try {
+			if (!req.me || !["admin", "employee"].includes(req.me.role)) {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new GetCinemaRoomsController(null, new GetCinemaRoomsService(new GetCinemaRoomsRepository()));
+			const response = await controller.handle();
+			res.status(200).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
 };

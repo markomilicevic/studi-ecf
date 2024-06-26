@@ -34,6 +34,8 @@ export default class GetCinemaRoomsRepository {
 			obj.setCinemaRoomId(cinemaRoom.cinemaRoomId);
 			obj.setRoomNumber(cinemaRoom.roomNumber);
 			obj.setPlacementsMatrix(cinemaRoom.placementsMatrix);
+			obj.setCreatedAt(cinemaRoom.createdAt);
+			obj.setUpdatedAt(cinemaRoom.updatedAt);
 
 			const c = new Cinema();
 			c.setCinemaId(cinemaRoom.cinema.cinemaId);
