@@ -15,6 +15,7 @@ import { AdminAnalytics } from "components/pages/AdminAnalytics";
 import { Booking } from "components/pages/Booking";
 import { Contact } from "components/pages/Contact";
 import { HomePage } from "components/pages/HomePage";
+import { Intranet } from "components/pages/Intranet";
 import { Movies } from "components/pages/Movies";
 import { BannerProvider } from "components/templates/Page/providers/BannerProvider";
 import { CurrentCinemaProvider } from "components/templates/Page/providers/CurrentCinemaProvider";
@@ -66,6 +67,10 @@ const router = createBrowserRouter([
 	{
 		path: "/admin/analytics",
 		element: <AdminAnalytics />,
+	},
+	{
+		path: "/intranet",
+		element: <Intranet />,
 	},
 ]);
 
