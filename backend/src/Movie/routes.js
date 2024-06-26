@@ -18,6 +18,9 @@ import GetMovieCommentsService from "./UseCase/GetMovieComments/GetMovieComments
 import GetMoviesService from "./UseCase/GetMovies/GetMoviesService.js";
 import UpdateMovieService from "./UseCase/UpdateMovie/UpdateMovieService.js";
 import UploadMoviePosterService from "./UseCase/UploadMoviePoster/UploadMoviePosterService.js";
+import GetMoviesCommentsController from "./Adapter/Http/GetMoviesComments/GetMoviesCommentsController.js";
+import GetMoviesCommentsRepository from "./Adapter/Sequelize/GetMoviesComments/GetMoviesCommentsRepository.js";
+import GetMoviesCommentsService from "./UseCase/GetMoviesComments/GetMoviesCommentsService.js";
 
 export const loadMovieRoutes = (app) => {
 	app.get("/api/v1/movies/actives", async (req, res) => {
@@ -134,6 +137,21 @@ export const loadMovieRoutes = (app) => {
 			}
 
 			res.status(code).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.get("/api/v1/movies/comments", async (req, res) => {
+		try {
+			if (!req.me || req.me.role !== "employee") {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new GetMoviesCommentsController(null, new GetMoviesCommentsService(new GetMoviesCommentsRepository()));
+			const response = await controller.handle(req.query);
+			res.status(200).json(response);
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ error: true });
