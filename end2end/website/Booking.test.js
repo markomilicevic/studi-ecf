@@ -1,6 +1,6 @@
 import { changeDropdownNthValue, startBrowser } from "../helpers.js";
 
-describe("Web's Booking page", () => {
+describe("Website's Booking page", () => {
 	it("should render page", async () => {
 		const { browser, page } = await startBrowser();
 

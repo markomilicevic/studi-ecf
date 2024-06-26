@@ -1,6 +1,6 @@
 import { changeDropdownNthValue, startBrowser } from "../helpers.js";
 
-describe("Web's Movies page", () => {
+describe("Website's Movies page", () => {
 	it("should render page", async () => {
 		const { browser, page } = await startBrowser();
 
