@@ -1,5 +1,6 @@
 import { useContext } from "react";
 
+import { AdminCinemaRoomList } from "components/organisms/AdminCinemaRoomList";
 import { AdminMovieList } from "components/organisms/AdminMovieList";
 import { AdminNav } from "components/organisms/AdminNav";
 import { AdminSessionList } from "components/organisms/AdminSessionList";
@@ -20,6 +21,7 @@ export default function Admin() {
 			<div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
 				<AdminMovieList />
 				<AdminSessionList />
+				<AdminCinemaRoomList />
 			</div>
 		</Page>
 	);
