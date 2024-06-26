@@ -1,5 +1,6 @@
 import BookingTicketsRepository from "./Adapter/ElasticSearch/Book/BookingTicketsRepository.js";
 import BookController from "./Adapter/Http/Book/BookController.js";
+import GetBookingOrdersController from "./Adapter/Http/GetBookingOrders/GetBookingOrdersController.js";
 import VerifyBookingController from "./Adapter/Http/VerifyBooking/VerifyBookingController.js";
 import BookingRepository from "./Adapter/Sequelize/Book/BookingRepository.js";
 import BookingSessionRepository from "./Adapter/Sequelize/Book/BookingSessionRepository.js";
@@ -8,7 +9,12 @@ import BookingValidatorCinemasRepository from "./Adapter/Sequelize/BookingValida
 import BookingValidatorPricesRepository from "./Adapter/Sequelize/BookingValidator/BookingValidatorPricesRepository.js";
 import BookingValidatorSessionRepository from "./Adapter/Sequelize/BookingValidator/BookingValidatorSessionRepository.js";
 import BookingValidatorSessionReservedPlacementRepository from "./Adapter/Sequelize/BookingValidator/BookingValidatorSessionReservedPlacementRepository.js";
+import GetBookingMovieCommentsRepository from "./Adapter/Sequelize/GetBookingOrders/GetBookingMovieCommentsRepository.js";
+import GetBookingMovieRatingsRepository from "./Adapter/Sequelize/GetBookingOrders/GetBookingMovieRatingsRepository.js";
+import GetBookingOrdersRepository from "./Adapter/Sequelize/GetBookingOrders/GetBookingOrdersRepository.js";
+import GetBookingSessionReservedPlacementRepository from "./Adapter/Sequelize/GetBookingOrders/GetBookingSessionReservedPlacementRepository.js";
 import BookService from "./UseCase/Book/BookService.js";
+import GetBookingOrdersService from "./UseCase/GetBookingOrders/GetBookingOrdersService.js";
 import BookingValidator from "./Validator/BookingValidator.js";
 
 export const loadBookingRoutes = (app) => {
@@ -62,6 +68,32 @@ export const loadBookingRoutes = (app) => {
 				choicedPlaces: req.body.choicedPlaces,
 				expectedTotalPriceValue: req.body.expectedTotalPriceValue,
 				expectedTotalPriceUnit: req.body.expectedTotalPriceUnit,
+			});
+			res.status(200).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.get("/api/v1/booking/orders", async (req, res) => {
+		try {
+			if (!req.me || req.me.role !== "user") {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new GetBookingOrdersController(
+				null,
+				new GetBookingOrdersService(
+					new GetBookingOrdersRepository(),
+					new GetBookingSessionReservedPlacementRepository(),
+					new GetBookingMovieCommentsRepository(),
+					new GetBookingMovieRatingsRepository()
+				)
+			);
+			const response = await controller.handle({
+				...req.query,
+				userId: req.me.userId,
 			});
 			res.status(200).json(response);
 		} catch (err) {
