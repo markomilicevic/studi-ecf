@@ -688,8 +688,24 @@ VALUES
 		'88ad4c7c-4218-4d1e-a9d3-b842e8b12304',
 		'50601073-b3e4-4772-a444-cbeff5c82b45',
 		'Très bon film !',
-		'created',
+		'approved',
 		'2001-01-05 09:00:00.000'
 	);
+
+CREATE TABLE movies_ratings (
+	movieRatingId UUID PRIMARY KEY,
+	movieId UUID NOT NULL,
+	sessionId UUID NOT NULL,
+	userId UUID NOT NULL,
+	rating TINYINT(1) NOT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (sessionId, userId, unarchived),
+	FOREIGN KEY (movieId) REFERENCES movies(movieId),
+	FOREIGN KEY (sessionId) REFERENCES sessions(sessionId),
+	FOREIGN KEY (userId) REFERENCES users(userId)
+);
 
 COMMIT;

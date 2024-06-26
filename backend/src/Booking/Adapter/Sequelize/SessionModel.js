@@ -1,8 +1,9 @@
 import { DataTypes } from "@sequelize/core";
 
 import { SequelizeFactory } from "../../../Common/Utils/sequelize.js";
+import BookingModel from "./BookingModel.js";
 
-export default SequelizeFactory.getInstance()
+const model = SequelizeFactory.getInstance()
 	.getSequelize()
 	.define(
 		"session",
@@ -40,3 +41,7 @@ export default SequelizeFactory.getInstance()
 			paranoid: true,
 		}
 	);
+
+model.hasMany(BookingModel, { foreignKey: "sessionId" });
+
+export default model;

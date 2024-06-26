@@ -63,6 +63,13 @@ export default function Header() {
 									</NavLink>
 								</li>
 							)}
+							{isConnected && userData?.data?.role === "user" && (
+								<li>
+									<NavLink to="/user" data-testid="header-link-user">
+										Mon espace
+									</NavLink>
+								</li>
+							)}
 						</ul>
 					</Nav>
 				</Box>

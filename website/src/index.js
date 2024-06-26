@@ -17,6 +17,7 @@ import { Contact } from "components/pages/Contact";
 import { HomePage } from "components/pages/HomePage";
 import { Intranet } from "components/pages/Intranet";
 import { Movies } from "components/pages/Movies";
+import { User } from "components/pages/User";
 import { BannerProvider } from "components/templates/Page/providers/BannerProvider";
 import { CurrentCinemaProvider } from "components/templates/Page/providers/CurrentCinemaProvider";
 import { CurrentUserProvider } from "components/templates/Page/providers/CurrentUserProvider";
@@ -39,6 +40,15 @@ const queryClient = new QueryClient({
 	},
 });
 
+const redirectLogged = () => {
+	if (window.localStorage.getItem("FLAG_IS_CONNECTED-v1") === JSON.stringify(true)) {
+		// User already logged
+		// Do redirect to the home
+		window.location.href = "/";
+	}
+	return {};
+};
+
 const router = createBrowserRouter([
 	{
 		path: "/",
@@ -58,6 +68,7 @@ const router = createBrowserRouter([
 	},
 	{
 		path: "/account",
+		loader: redirectLogged,
 		element: <Account />,
 	},
 	{
@@ -71,6 +82,10 @@ const router = createBrowserRouter([
 	{
 		path: "/intranet",
 		element: <Intranet />,
+	},
+	{
+		path: "/user",
+		element: <User />,
 	},
 ]);
 
