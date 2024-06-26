@@ -2,6 +2,7 @@ import Grid from "@mui/material/Grid";
 
 import { SignupForm } from "components/organisms/SignupForm";
 import { SigninForm } from "components/organisms/SigninForm";
+import { SendResetPasswordEmailForm } from "components/organisms/SendResetPasswordEmailForm";
 
 export default function AccountForm({ connect }) {
 	return (
@@ -11,6 +12,9 @@ export default function AccountForm({ connect }) {
 			</Grid>
 			<Grid item xs={12} md={6}>
 				<SigninForm onUserAuthentified={connect} />
+				<div style={{ marginTop: 60 }}>
+					<SendResetPasswordEmailForm />
+				</div>
 			</Grid>
 		</Grid>
 	);
