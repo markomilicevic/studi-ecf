@@ -1,11 +1,13 @@
 import Response from "../Common/Utils/Response.js";
 import { SequelizeFactory } from "../Common/Utils/sequelize.js";
+import DeleteUserController from "./Adapter/Http/DeleteUser/DeleteUserController.js";
 import GetUsersController from "./Adapter/Http/GetUsers/GetUsersController.js";
 import InviteController from "./Adapter/Http/Invite/InviteController.js";
 import SigninController from "./Adapter/Http/Signin/SigninController.js";
 import SignupController from "./Adapter/Http/Signup/SignupController.js";
 import UpdateUserController from "./Adapter/Http/UpdateUser/UpdateUserController.js";
 import AuthJwtRepository from "./Adapter/Jwt/AuthJwtRepository.js";
+import DeleteUserRepository from "./Adapter/Sequelize/DeleteUser/DeleteUserRepository.js";
 import GetUsersRepository from "./Adapter/Sequelize/GetUsers/GetUsersRepository.js";
 import InviteRepository from "./Adapter/Sequelize/Invite/InviteRepository.js";
 import SigninRepository from "./Adapter/Sequelize/Signin/SigninRepository.js";
@@ -14,6 +16,7 @@ import UpdateUserRepository from "./Adapter/Sequelize/UpdateUser/UpdateUserRepos
 import UserValidatorRepository from "./Adapter/Sequelize/UserValidator/UserValidatorRepository.js";
 import InviteEmailRepository from "./Adapter/Smtp/Invite/InviteEmailRepository.js";
 import SignupEmailRepository from "./Adapter/Smtp/Signup/SignupEmailRepository.js";
+import DeleteUserService from "./UseCase/DeleteUser/DeleteUserService.js";
 import GetUsersService from "./UseCase/GetUsers/GetUsersService.js";
 import InviteService from "./UseCase/Invite/InviteService.js";
 import SigninService from "./UseCase/Signin/SigninService.js";
@@ -172,6 +175,26 @@ export const loadUserRoutes = (app) => {
 			}
 
 			res.status(code).json(fileredResponse);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.delete("/api/v1/users/:userId", async (req, res) => {
+		try {
+			if (!req.me || req.me.role !== "admin") {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new DeleteUserController(
+				new UserValidatorService(new UserValidatorRepository()),
+				new DeleteUserService(new DeleteUserRepository())
+			);
+			const response = await controller.handle({
+				userId: req.params.userId,
+			});
+			res.status(200).json(response);
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ error: true });
