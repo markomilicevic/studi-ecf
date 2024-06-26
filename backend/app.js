@@ -9,6 +9,7 @@ import { loadBookingRoutes } from "./src/Booking/routes.js";
 import { loadCinemaRoutes } from "./src/Cinema/routes.js";
 import { loadGenreRoutes } from "./src/Genre/routes.js";
 import { loadMovieRoutes } from "./src/Movie/routes.js";
+import { loadQualityRoutes } from "./src/Quality/routes.js";
 import { loadSessionRoutes } from "./src/Session/routes.js";
 import AuthJwtRepository from "./src/User/Adapter/Jwt/AuthJwtRepository.js";
 import GetMeRepository from "./src/User/Adapter/Sequelize/GetMe/GetMeRepository.js";
@@ -95,6 +96,7 @@ import { loadUserRoutes } from "./src/User/routes.js";
 	loadMovieRoutes(app);
 	loadSessionRoutes(app);
 	loadUserRoutes(app);
+	loadQualityRoutes(app);
 
 	app.listen(port, () => {
 		console.log(`Server is running on http://localhost:${port}`);

@@ -103,6 +103,9 @@ export default class GetSessionsRepository {
 				obj.setEndDate(session.endDate);
 				obj.setStandartFreePlaces(session.standartFreePlaces);
 				obj.setDisabledFreePlaces(session.disabledFreePlaces);
+				obj.setCreatedAt(session.createdAt);
+				obj.setUpdatedAt(session.updatedAt);
+
 				return obj;
 			}),
 		};

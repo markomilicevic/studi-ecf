@@ -58,4 +58,12 @@ export default class Session {
 	setSessionReservedPlacement(sessionReservedPlacement) {
 		Object.assign(this, sessionReservedPlacement);
 	}
+
+	setCreatedAt(createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	setUpdatedAt(updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 }
