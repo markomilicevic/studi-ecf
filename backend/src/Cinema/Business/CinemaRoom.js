@@ -11,6 +11,14 @@ export default class CinemaRoom {
 		this.placementsMatrix = placementsMatrix;
 	}
 
+	setCreatedAt(createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	setUpdatedAt(updatedAt) {
+		this.updatedAt = updatedAt;
+	}
+
 	setCinema(cinema) {
 		Object.assign(this, cinema);
 	}
