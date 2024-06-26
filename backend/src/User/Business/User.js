@@ -22,4 +22,12 @@ export default class User {
 	setRole(role) {
 		this.role = role;
 	}
+
+	setCreatedAt(createdAt) {
+		this.createdAt = createdAt;
+	}
+
+	setUpdatedAt(updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 }
