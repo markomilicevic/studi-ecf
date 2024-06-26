@@ -5,6 +5,7 @@ import cors from "cors";
 import express from "express";
 import fileUpload from "express-fileupload";
 
+import { loadAnalyticsRoutes } from "./src/Analytics/routes.js";
 import { loadBookingRoutes } from "./src/Booking/routes.js";
 import { loadCinemaRoutes } from "./src/Cinema/routes.js";
 import { loadGenreRoutes } from "./src/Genre/routes.js";
@@ -90,6 +91,7 @@ import { loadUserRoutes } from "./src/User/routes.js";
 		res.status(200).json({ ok: true });
 	});
 
+	loadAnalyticsRoutes(app);
 	loadBookingRoutes(app);
 	loadCinemaRoutes(app);
 	loadGenreRoutes(app);
