@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import { Account } from "components/pages/Account";
+import { AccountReset } from "components/pages/AccountReset";
 import { Admin } from "components/pages/Admin";
 import { AdminAnalytics } from "components/pages/AdminAnalytics";
 import { Booking } from "components/pages/Booking";
@@ -70,6 +71,11 @@ const router = createBrowserRouter([
 		path: "/account",
 		loader: redirectLogged,
 		element: <Account />,
+	},
+	{
+		path: "/account/reset/:resetPasswordToken",
+		loader: redirectLogged,
+		element: <AccountReset />,
 	},
 	{
 		path: "/admin",
