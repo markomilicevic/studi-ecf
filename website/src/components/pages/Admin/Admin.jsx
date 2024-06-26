@@ -1,6 +1,7 @@
 import { useContext } from "react";
 
 import { AdminMovieList } from "components/organisms/AdminMovieList";
+import { AdminSessionList } from "components/organisms/AdminSessionList";
 import { Page } from "components/templates/Page";
 import { CurrentUserContext } from "components/templates/Page/providers/CurrentUserProvider";
 
@@ -15,6 +16,7 @@ export default function Admin() {
 		<Page>
 			<div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
 				<AdminMovieList />
+				<AdminSessionList />
 			</div>
 		</Page>
 	);
