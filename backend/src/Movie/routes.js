@@ -12,6 +12,9 @@ import GetMovieCommentsService from "./UseCase/GetMovieComments/GetMovieComments
 import GetMoviesService from "./UseCase/GetMovies/GetMoviesService.js";
 import UpdateMovieService from "./UseCase/UpdateMovie/UpdateMovieService.js";
 import UploadMoviePosterService from "./UseCase/UploadMoviePoster/UploadMoviePosterService.js";
+import CreateMovieController from "./Adapter/Http/CreateMovie/CreateMovieController.js";
+import CreateMovieService from "./UseCase/CreateMovie/CreateMovieService.js";
+import CreateMovieRepository from "./Adapter/Sequelize/CreateMovie/CreateMovieRepository.js";
 
 export const loadMovieRoutes = (app) => {
 	app.get("/api/v1/movies/actives", async (req, res) => {
@@ -81,6 +84,27 @@ export const loadMovieRoutes = (app) => {
 			const response = await controller.handle({ ...req.body, movieId: req.params.movieId });
 
 			let code = 204; // No content
+			if (response.status === "USER_ERRORS") {
+				code = 400; // Bad request
+			}
+
+			res.status(code).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.post("/api/v1/movies", async (req, res) => {
+		try {
+			if (!req.me || !["admin", "employee"].includes(req.me.role)) {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new CreateMovieController(null, new CreateMovieService(new CreateMovieRepository()));
+			const response = await controller.handle(req.body);
+
+			let code = 201; // Created
 			if (response.status === "USER_ERRORS") {
 				code = 400; // Bad request
 			}
