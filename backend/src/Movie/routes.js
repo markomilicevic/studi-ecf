@@ -3,24 +3,27 @@ import DeleteMovieController from "./Adapter/Http/DeleteMovie/DeleteMovieControl
 import GetActiveMoviesController from "./Adapter/Http/GetActiveMovies/GetActiveMoviesController.js";
 import GetMovieCommentsController from "./Adapter/Http/GetMovieComments/GetMovieCommentsController.js";
 import GetMoviesController from "./Adapter/Http/GetMovies/GetMoviesController.js";
+import GetMoviesCommentsController from "./Adapter/Http/GetMoviesComments/GetMoviesCommentsController.js";
 import UpdateMovieController from "./Adapter/Http/UpdateMovie/UpdateMovieController.js";
+import UpdateMovieCommentController from "./Adapter/Http/UpdateMovieComment/UpdateMovieCommentController.js";
 import UploadMoviePosterController from "./Adapter/Http/UploadMoviePoster/UploadMoviePosterController.js";
 import CreateMovieRepository from "./Adapter/Sequelize/CreateMovie/CreateMovieRepository.js";
 import DeleteMovieRepository from "./Adapter/Sequelize/DeleteMovie/DeleteMovieRepository.js";
 import GetActiveMoviesRepository from "./Adapter/Sequelize/GetActiveMovies/GetActiveMoviesRepository.js";
 import GetMovieCommentsRepository from "./Adapter/Sequelize/GetMovieComments/GetMovieCommentsRepository.js";
 import GetMoviesRepository from "./Adapter/Sequelize/GetMovies/GetMoviesRepository.js";
+import GetMoviesCommentsRepository from "./Adapter/Sequelize/GetMoviesComments/GetMoviesCommentsRepository.js";
 import UpdateMovieRepository from "./Adapter/Sequelize/UpdateMovie/UpdateMovieRepository.js";
+import UpdateMovieCommentRepository from "./Adapter/Sequelize/UpdateMovieComment/UpdateMovieCommentRepository.js";
 import CreateMovieService from "./UseCase/CreateMovie/CreateMovieService.js";
 import DeleteMovieService from "./UseCase/DeleteMovie/DeleteMovieService.js";
 import GetActiveMoviesService from "./UseCase/GetActiveMovies/GetActiveMoviesService.js";
 import GetMovieCommentsService from "./UseCase/GetMovieComments/GetMovieCommentsService.js";
 import GetMoviesService from "./UseCase/GetMovies/GetMoviesService.js";
-import UpdateMovieService from "./UseCase/UpdateMovie/UpdateMovieService.js";
-import UploadMoviePosterService from "./UseCase/UploadMoviePoster/UploadMoviePosterService.js";
-import GetMoviesCommentsController from "./Adapter/Http/GetMoviesComments/GetMoviesCommentsController.js";
-import GetMoviesCommentsRepository from "./Adapter/Sequelize/GetMoviesComments/GetMoviesCommentsRepository.js";
 import GetMoviesCommentsService from "./UseCase/GetMoviesComments/GetMoviesCommentsService.js";
+import UpdateMovieService from "./UseCase/UpdateMovie/UpdateMovieService.js";
+import UpdateMovieCommentService from "./UseCase/UpdateMovieComment/UpdateMovieCommentService.js";
+import UploadMoviePosterService from "./UseCase/UploadMoviePoster/UploadMoviePosterService.js";
 
 export const loadMovieRoutes = (app) => {
 	app.get("/api/v1/movies/actives", async (req, res) => {
@@ -152,6 +155,30 @@ export const loadMovieRoutes = (app) => {
 			const controller = new GetMoviesCommentsController(null, new GetMoviesCommentsService(new GetMoviesCommentsRepository()));
 			const response = await controller.handle(req.query);
 			res.status(200).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.put("/api/v1/movies/comments/:movieCommentId", async (req, res) => {
+		try {
+			if (!req.me || req.me.role !== "employee") {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new UpdateMovieCommentController(null, new UpdateMovieCommentService(new UpdateMovieCommentRepository()));
+			const response = await controller.handle({
+				...req.body,
+				movieCommentId: req.params.movieCommentId,
+			});
+
+			let code = 204; // No content
+			if (response.status === "USER_ERRORS") {
+				code = 400; // Bad request
+			}
+
+			res.status(code).json(response);
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ error: true });
