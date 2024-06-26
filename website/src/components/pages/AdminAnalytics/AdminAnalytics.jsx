@@ -1,12 +1,11 @@
 import { useContext } from "react";
 
-import { AdminMovieList } from "components/organisms/AdminMovieList";
 import { AdminNav } from "components/organisms/AdminNav";
-import { AdminSessionList } from "components/organisms/AdminSessionList";
+import { AdminTicketsChart } from "components/organisms/AdminTicketsChart";
 import { Page } from "components/templates/Page";
 import { CurrentUserContext } from "components/templates/Page/providers/CurrentUserProvider";
 
-export default function Admin() {
+export default function AdminAnalytics() {
 	const { isConnected, data: userData } = useContext(CurrentUserContext);
 
 	if (!isConnected || (userData?.data?.role && userData.data.role !== "admin")) {
@@ -17,10 +16,7 @@ export default function Admin() {
 		<Page>
 			<AdminNav />
 			<hr />
-			<div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-				<AdminMovieList />
-				<AdminSessionList />
-			</div>
+			<AdminTicketsChart />
 		</Page>
 	);
 }
