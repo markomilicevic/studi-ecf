@@ -8,6 +8,9 @@ import GetSequelizeClosestCinemaRepository from "./Adapter/Sequelize/GetClosestC
 import GetCinemaRoomsService from "./UseCase/GetCinemaRooms/GetCinemaRoomsService.js";
 import GetCinemasService from "./UseCase/GetCinemas/GetCinemasService.js";
 import GetClosestCinemaService from "./UseCase/GetClosestCinema/GetClosestCinemaService.js";
+import UpdateCinemaRoomController from "./Adapter/Http/UpdateCinemaRoom/UpdateCinemaRoomController.js";
+import UpdateCinemaRoomRepository from "./Adapter/Sequelize/UpdateCinemaRoom/UpdateCinemaRoomRepository.js";
+import UpdateCinemaRoomService from "./UseCase/UpdateCinemaRoom/UpdateCinemaRoomService.js";
 
 export const loadCinemaRoutes = (app) => {
 	app.get("/api/v1/cinemas", async (req, res) => {
@@ -64,6 +67,27 @@ export const loadCinemaRoutes = (app) => {
 			const controller = new GetCinemaRoomsController(null, new GetCinemaRoomsService(new GetCinemaRoomsRepository()));
 			const response = await controller.handle();
 			res.status(200).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.put("/api/v1/cinemas/:cinemaId/rooms/:cinemaRoomId", async (req, res) => {
+		try {
+			if (!req.me || !["admin", "employee"].includes(req.me.role)) {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new UpdateCinemaRoomController(null, new UpdateCinemaRoomService(new UpdateCinemaRoomRepository()));
+			const response = await controller.handle({ ...req.body, cinemaId: req.params.cinemaId, cinemaRoomId: req.params.cinemaRoomId });
+
+			let code = 204; // No content
+			if (response.status === "USER_ERRORS") {
+				code = 400; // Bad request
+			}
+
+			res.status(code).json(response);
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ error: true });
