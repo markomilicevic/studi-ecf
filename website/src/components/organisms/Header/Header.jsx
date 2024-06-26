@@ -49,6 +49,13 @@ export default function Header() {
 									Contact
 								</NavLink>
 							</li>
+							{isConnected && userData?.data?.role === "admin" && (
+								<li>
+									<NavLink to="/admin" data-testid="header-link-admin">
+										Administration
+									</NavLink>
+								</li>
+							)}
 						</ul>
 					</Nav>
 				</Box>
