@@ -10,6 +10,7 @@ import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
 import { Account } from "components/pages/Account";
+import { Admin } from "components/pages/Admin";
 import { Booking } from "components/pages/Booking";
 import { Contact } from "components/pages/Contact";
 import { HomePage } from "components/pages/HomePage";
@@ -56,6 +57,10 @@ const router = createBrowserRouter([
 	{
 		path: "/account",
 		element: <Account />,
+	},
+	{
+		path: "/admin",
+		element: <Admin />,
 	},
 ]);
 

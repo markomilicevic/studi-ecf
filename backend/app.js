@@ -3,6 +3,7 @@ import "./env.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
+import fileUpload from "express-fileupload";
 
 import { loadBookingRoutes } from "./src/Booking/routes.js";
 import { loadCinemaRoutes } from "./src/Cinema/routes.js";
@@ -25,6 +26,16 @@ import { loadUserRoutes } from "./src/User/routes.js";
 	);
 	app.use(express.json());
 	app.use(cookieParser());
+	app.use(
+		fileUpload({
+			limits: {
+				fileSize: 1024 * 1024 * 1024, // Anti DDoS protection (1GB)
+			},
+			abortOnLimit: true,
+			useTempFiles: true,
+			tempFileDir: "/tmp/",
+		})
+	);
 
 	// Middleware to check common params
 	app.use((req, res, next) => {
