@@ -1,17 +1,21 @@
 import Response from "../Common/Utils/Response.js";
 import { SequelizeFactory } from "../Common/Utils/sequelize.js";
 import GetUsersController from "./Adapter/Http/GetUsers/GetUsersController.js";
+import InviteController from "./Adapter/Http/Invite/InviteController.js";
 import SigninController from "./Adapter/Http/Signin/SigninController.js";
 import SignupController from "./Adapter/Http/Signup/SignupController.js";
 import UpdateUserController from "./Adapter/Http/UpdateUser/UpdateUserController.js";
 import AuthJwtRepository from "./Adapter/Jwt/AuthJwtRepository.js";
 import GetUsersRepository from "./Adapter/Sequelize/GetUsers/GetUsersRepository.js";
+import InviteRepository from "./Adapter/Sequelize/Invite/InviteRepository.js";
 import SigninRepository from "./Adapter/Sequelize/Signin/SigninRepository.js";
 import SignupRepository from "./Adapter/Sequelize/Signup/SignupRepository.js";
 import UpdateUserRepository from "./Adapter/Sequelize/UpdateUser/UpdateUserRepository.js";
 import UserValidatorRepository from "./Adapter/Sequelize/UserValidator/UserValidatorRepository.js";
+import InviteEmailRepository from "./Adapter/Smtp/Invite/InviteEmailRepository.js";
 import SignupEmailRepository from "./Adapter/Smtp/Signup/SignupEmailRepository.js";
 import GetUsersService from "./UseCase/GetUsers/GetUsersService.js";
+import InviteService from "./UseCase/Invite/InviteService.js";
 import SigninService from "./UseCase/Signin/SigninService.js";
 import SignupService from "./UseCase/Signup/SignupService.js";
 import UpdateUserService from "./UseCase/UpdateUser/UpdateUserService.js";
@@ -49,15 +53,30 @@ export const loadUserRoutes = (app) => {
 
 	app.post("/api/v1/users", async (req, res) => {
 		try {
-			if (req.me) {
-				// Already logged
-				return res.status(401).json({ error: true });
+			let controller;
+			if (req.body.role) {
+				// Invite
+				if (req.me.role !== "admin") {
+					// Not an admin
+					return res.status(401).json({ error: true });
+				}
+				controller = new InviteController(null, new InviteService(new InviteRepository(), new InviteEmailRepository()));
+			} else {
+				if (req.me) {
+					// Already logged
+					return res.status(401).json({ error: true });
+				}
+				controller = new SignupController(
+					null,
+					null,
+					new SignupService(
+						SequelizeFactory.getInstance().getSequelize(),
+						new SignupRepository(),
+						new AuthJwtRepository(),
+						new SignupEmailRepository()
+					)
+				);
 			}
-
-			const controller = new SignupController(
-				null,
-				new SignupService(SequelizeFactory.getInstance().getSequelize(), new SignupRepository(), new AuthJwtRepository(), new SignupEmailRepository())
-			);
 			const response = await controller.handle(req.body);
 
 			let code = 201; // Created
