@@ -1,13 +1,16 @@
+import Response from "../Common/Utils/Response.js";
 import { SequelizeFactory } from "../Common/Utils/sequelize.js";
+import GetUsersController from "./Adapter/Http/GetUsers/GetUsersController.js";
 import SigninController from "./Adapter/Http/Signin/SigninController.js";
 import SignupController from "./Adapter/Http/Signup/SignupController.js";
 import AuthJwtRepository from "./Adapter/Jwt/AuthJwtRepository.js";
+import GetUsersRepository from "./Adapter/Sequelize/GetUsers/GetUsersRepository.js";
 import SigninRepository from "./Adapter/Sequelize/Signin/SigninRepository.js";
 import SignupRepository from "./Adapter/Sequelize/Signup/SignupRepository.js";
 import SignupEmailRepository from "./Adapter/Smtp/Signup/SignupEmailRepository.js";
+import GetUsersService from "./UseCase/GetUsers/GetUsersService.js";
 import SigninService from "./UseCase/Signin/SigninService.js";
 import SignupService from "./UseCase/Signup/SignupService.js";
-import Response from "../Common/Utils/Response.js";
 
 export const loadUserRoutes = (app) => {
 	app.get("/api/v1/users/me", async (req, res) => {
@@ -105,6 +108,21 @@ export const loadUserRoutes = (app) => {
 			}
 
 			res.status(code).json(fileredResponse);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.get("/api/v1/users", async (req, res) => {
+		try {
+			if (!req.me || req.me.role !== "admin") {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new GetUsersController(null, new GetUsersService(new GetUsersRepository()));
+			const response = await controller.handle(req.query);
+			res.status(200).json(response);
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ error: true });
