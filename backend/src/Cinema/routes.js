@@ -1,4 +1,5 @@
 import GetGeoJsClosestCinemaRepository from "./Adapter/GeoJs/GetClosestCinema/GetClosestCinemaRepository.js";
+import ContactCinemaController from "./Adapter/Http/ContactCinema/ContactCinemaController.js";
 import CreateCinemaRoomController from "./Adapter/Http/CreateCinemaRoom/CreateCinemaRoomController.js";
 import DeleteCinemaRoomController from "./Adapter/Http/DeleteCinemaRoom/DeleteCinemaRoomController.js";
 import GetCinemaRoomsController from "./Adapter/Http/GetCinemaRooms/GetCinemaRoomsController.js";
@@ -11,6 +12,8 @@ import GetCinemaRoomsRepository from "./Adapter/Sequelize/GetCinemaRooms/GetCine
 import GetCinemasRepository from "./Adapter/Sequelize/GetCinemas/GetCinemasRepository.js";
 import GetSequelizeClosestCinemaRepository from "./Adapter/Sequelize/GetClosestCinema/GetClosestCinemaRepository.js";
 import UpdateCinemaRoomRepository from "./Adapter/Sequelize/UpdateCinemaRoom/UpdateCinemaRoomRepository.js";
+import ContactCinemaMailerRepository from "./Adapter/Smtp/ContactCinema/ContactCinemaMailerRepository.js";
+import ContactCinemaService from "./UseCase/ContactCinema/ContactCinemaService.js";
 import CreateCinemaRoomService from "./UseCase/CreateCinemaRoom/CreateCinemaRoomService.js";
 import DeleteCinemaRoomService from "./UseCase/DeleteCinemaRoom/DeleteCinemaRoomService.js";
 import GetCinemaRoomsService from "./UseCase/GetCinemaRooms/GetCinemaRoomsService.js";
@@ -139,6 +142,27 @@ export const loadCinemaRoutes = (app) => {
 			}
 
 			res.status(code).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.post("/api/v1/cinemas/contact", async (req, res) => {
+		try {
+			const controller = new ContactCinemaController(null, new ContactCinemaService(new ContactCinemaMailerRepository()));
+			const response = await controller.handle(req.body);
+
+			let code = 201; // Created
+			let fileredResponse = {
+				status: response.status,
+			};
+			if (response.status === "USER_ERRORS") {
+				code = 400; // Bad request
+				fileredResponse.errors = response.errors;
+			}
+
+			res.status(code).json(fileredResponse);
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ error: true });

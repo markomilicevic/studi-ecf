@@ -1,6 +1,6 @@
 import { changeDropdownNthValue, clickButton, startBrowser } from "../helpers.js";
 
-describe("Web's HomePage", () => {
+describe("Website's HomePage", () => {
 	it("should render page", async () => {
 		const { browser, page } = await startBrowser();
 

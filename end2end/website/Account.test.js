@@ -1,6 +1,6 @@
 import { clickButton, startBrowser } from "../helpers.js";
 
-describe("Web's Account page", () => {
+describe("Website's Account page", () => {
 	it("should render page", async () => {
 		const { browser, page } = await startBrowser();
 
