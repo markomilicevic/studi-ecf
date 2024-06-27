@@ -23,8 +23,8 @@ export default function SigninForm({ onUserAuthentified }) {
 		clearErrors,
 	} = useForm({
 		defaultValues: {
-			email: "employee@example.com",
-			password: "employee",
+			email: "",
+			password: "",
 		},
 	});
 
