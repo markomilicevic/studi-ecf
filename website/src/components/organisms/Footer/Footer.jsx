@@ -1,4 +1,5 @@
 import { useContext } from "react";
+import { Link } from "react-router-dom";
 
 import { CinemaList } from "components/organisms/CinemaList";
 import { CurrentCinemaContext } from "components/templates/Page/providers/CurrentCinemaProvider";
@@ -26,7 +27,12 @@ export default function Footer() {
 				setCinema={setCinema}
 				showDetails
 			/>
-			<div style={{ paddingTop: 32, textAlign: "center" }}>&copy; {new Date().getFullYear()} Marko Milicevic - Tous droits réservés</div>
+			<div style={{ paddingTop: 32, textAlign: "center" }}>
+				&copy; {new Date().getFullYear()} Marko Milicevic - Tous droits réservés -{" "}
+				<Link to="/tos" data-testid="footer-link-tos">
+					<u>Conditions Générales d'Utilisation</u>
+				</Link>
+			</div>
 		</footer>
 	);
 }

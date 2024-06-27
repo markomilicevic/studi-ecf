@@ -19,6 +19,7 @@ import { Contact } from "components/pages/Contact";
 import { HomePage } from "components/pages/HomePage";
 import { Intranet } from "components/pages/Intranet";
 import { Movies } from "components/pages/Movies";
+import { Tos } from "components/pages/Tos";
 import { User } from "components/pages/User";
 import { BannerProvider } from "components/templates/Page/providers/BannerProvider";
 import { CurrentCinemaProvider } from "components/templates/Page/providers/CurrentCinemaProvider";
@@ -97,6 +98,10 @@ const router = createBrowserRouter([
 	{
 		path: "/access/:code",
 		element: <Access />,
+	},
+	{
+		path: "/tos",
+		element: <Tos />,
 	},
 ]);
 
