@@ -1,0 +1,1 @@
+export { default as IncidentModal } from "./IncidentModal";
