@@ -7,6 +7,9 @@ install-dev:
 	# Install Website
 	cd website && npm install
 
+	# Install Mobile
+	cd mobile && npm install
+
 	# Install End2end testing
 	cd end2end && npm install
 
@@ -19,6 +22,9 @@ start-dev:
 
 	# Start Website (with create-react-app's watch)
 	cd website && nohup npm start > ../website.log 2>&1 &
+
+	# Start Mobile (with create-react-app's watch)
+	cd mobile && nohup npm start > ../mobile.log 2>&1 &
 
 	# Start Static (using simple python's http server)
 	cd static && nohup python3 -m http.server > ../static.log 2>&1 &
@@ -106,6 +112,9 @@ build-prod:
 
 	# Build Website
 	cd website && npm install && npm run build
+
+	# Build Mobile
+	cd mobile && npm install && npm run build
 
 cleanup-prod:
 	sudo docker system prune --all --force
