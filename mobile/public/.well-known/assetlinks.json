@@ -1,0 +1,8 @@
+[{
+      "relation": ["delegate_permission/common.handle_all_urls"],
+      "target": {
+        "namespace": "android_app",
+        "package_name": "fr.markomilicevic.studi_ecf.twa",
+        "sha256_cert_fingerprints": ["6A:60:32:C3:80:64:F4:2E:D6:AF:6A:9A:38:B9:F9:60:E1:55:D6:2A:F4:D3:7F:31:2D:89:FA:DF:77:AB:82:43"]
+      }
+    }]
