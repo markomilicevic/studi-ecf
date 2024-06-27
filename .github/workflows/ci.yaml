@@ -1,0 +1,95 @@
+on:
+  push:
+  pull_request:
+    branches:
+      - main
+      - staging
+
+jobs:
+  backend-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: backend/.nvmrc
+      - name: Install dependencies
+        run: cd backend && npm install 
+      - name: Upload dependencies
+        uses: actions/upload-artifact@v4
+        with:
+          name: backend-node-modules
+          path: backend/node_modules
+
+  backend-test:
+    needs: backend-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: backend-node-modules
+          path: backend/node_modules
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: backend/.nvmrc
+      - name: Lint
+        run: cd backend && npm run lint
+      - name: Test
+        run: cd backend && npm test
+        env:
+          CI: true
+
+  website-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: website/.nvmrc
+      - name: Install dependencies
+        run: cd website && npm install   
+      - name: Build application
+        run: cd website && npm run build
+      - name: Build Storybook
+        run: cd website && npm run build-storybook
+      - name: Upload dependencies
+        uses: actions/upload-artifact@v4
+        with:
+          name: website-node-modules
+          path: website/node_modules
+
+  website-test:
+    needs: website-build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Download dependencies
+        uses: actions/download-artifact@v4
+        with:
+          name: website-node-modules
+          path: website/node_modules
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: website/.nvmrc
+      - name: Test
+        run: cd website && npm test
+        env:
+          CI: true
+
+  deployment:
+    runs-on: ubuntu-latest
+    needs: [backend-test, website-test]
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Invoke web-hook
+        run: curl ${{ secrets.RELOAD_WEB_HOOK_URL }}

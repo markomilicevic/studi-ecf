@@ -1,0 +1,17 @@
+# Ignore all dotenv files
+.env
+
+# Ignore all log files
+*.log
+
+# Ignore all node_modules folders
+node_modules/
+
+# Ignore all code coverage generated folders
+coverage/
+
+# Ignore stat folder at the root level
+stat/
+
+# Ignore static folder at the root level
+static/
