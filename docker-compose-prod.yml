@@ -33,6 +33,7 @@ services:
         image: nginx:latest
         volumes:
             - ./website/build/:/var/www/website
+            - ./mobile/build/:/var/www/mobile
             - ./static/:/var/www/static
             - ./http/nginx.conf:/etc/nginx/nginx.conf
             - ./certbot/conf/:/etc/nginx/ssl

@@ -9,19 +9,8 @@ import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
-import { Access } from "components/pages/Access";
-import { Account } from "components/pages/Account";
-import { AccountReset } from "components/pages/AccountReset";
-import { Admin } from "components/pages/Admin";
-import { AdminAnalytics } from "components/pages/AdminAnalytics";
-import { Booking } from "components/pages/Booking";
-import { Contact } from "components/pages/Contact";
 import { HomePage } from "components/pages/HomePage";
-import { Intranet } from "components/pages/Intranet";
-import { Movies } from "components/pages/Movies";
 import { User } from "components/pages/User";
-import { BannerProvider } from "components/templates/Page/providers/BannerProvider";
-import { CurrentCinemaProvider } from "components/templates/Page/providers/CurrentCinemaProvider";
 import { CurrentUserProvider } from "components/templates/Page/providers/CurrentUserProvider";
 import Snackbar, { SnackbarUtilsConfigurator } from "services/utils/snackbar.js";
 
@@ -45,60 +34,28 @@ const queryClient = new QueryClient({
 const redirectLogged = () => {
 	if (window.localStorage.getItem("FLAG_IS_CONNECTED-v1") === JSON.stringify(true)) {
 		// User already logged
-		// Do redirect to the home
-		window.location.href = "/";
+		// Do redirect to the user's page
+		window.location.href = "/mobile/user";
 	}
 	return {};
 };
 
-const router = createBrowserRouter([
+const router = createBrowserRouter(
+	[
+		{
+			path: "/",
+			loader: redirectLogged,
+			element: <HomePage />,
+		},
+		{
+			path: "/user",
+			element: <User />,
+		},
+	],
 	{
-		path: "/",
-		element: <HomePage />,
-	},
-	{
-		path: "/booking",
-		element: <Booking />,
-	},
-	{
-		path: "/movies",
-		element: <Movies />,
-	},
-	{
-		path: "/contact",
-		element: <Contact />,
-	},
-	{
-		path: "/account",
-		loader: redirectLogged,
-		element: <Account />,
-	},
-	{
-		path: "/account/reset/:resetPasswordToken",
-		loader: redirectLogged,
-		element: <AccountReset />,
-	},
-	{
-		path: "/admin",
-		element: <Admin />,
-	},
-	{
-		path: "/admin/analytics",
-		element: <AdminAnalytics />,
-	},
-	{
-		path: "/intranet",
-		element: <Intranet />,
-	},
-	{
-		path: "/user",
-		element: <User />,
-	},
-	{
-		path: "/access/:code",
-		element: <Access />,
-	},
-]);
+		basename: "/mobile",
+	}
+);
 
 axios.defaults.withCredentials = true;
 
@@ -119,16 +76,12 @@ root.render(
 		<SnackbarProvider>
 			<SnackbarUtilsConfigurator />
 			<QueryClientProvider client={queryClient}>
-				<BannerProvider>
-					<CurrentUserProvider>
-						<CurrentCinemaProvider>
-							<ThemeProvider theme={theme}>
-								<CssBaseline />
-								<RouterProvider router={router} />
-							</ThemeProvider>
-						</CurrentCinemaProvider>
-					</CurrentUserProvider>
-				</BannerProvider>
+				<CurrentUserProvider>
+					<ThemeProvider theme={theme}>
+						<CssBaseline />
+						<RouterProvider router={router} />
+					</ThemeProvider>
+				</CurrentUserProvider>
 			</QueryClientProvider>
 		</SnackbarProvider>
 	</React.StrictMode>
