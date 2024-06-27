@@ -100,9 +100,23 @@ jobs:
       - name: Build application
         run: cd mobile && npm run build
 
+  desktop-build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: desktop/.nvmrc
+      - name: Install dependencies
+        run: cd desktop && npm install
+      - name: Build application
+        run: cd desktop && npm run build
+
   deployment:
     runs-on: ubuntu-latest
-    needs: [backend-test, website-test, mobile-build]
+    needs: [backend-test, website-test, mobile-build, desktop-build]
     if: github.ref == 'refs/heads/main'
     steps:
       - name: Invoke web-hook
