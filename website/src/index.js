@@ -9,6 +9,7 @@ import ReactDOM from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "react-query";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 
+import { Access } from "components/pages/Access";
 import { Account } from "components/pages/Account";
 import { AccountReset } from "components/pages/AccountReset";
 import { Admin } from "components/pages/Admin";
@@ -92,6 +93,10 @@ const router = createBrowserRouter([
 	{
 		path: "/user",
 		element: <User />,
+	},
+	{
+		path: "/access/:code",
+		element: <Access />,
 	},
 ]);
 
