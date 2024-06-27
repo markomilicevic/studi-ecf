@@ -2,12 +2,14 @@ import GetGeoJsClosestCinemaRepository from "./Adapter/GeoJs/GetClosestCinema/Ge
 import ContactCinemaController from "./Adapter/Http/ContactCinema/ContactCinemaController.js";
 import CreateCinemaRoomController from "./Adapter/Http/CreateCinemaRoom/CreateCinemaRoomController.js";
 import DeleteCinemaRoomController from "./Adapter/Http/DeleteCinemaRoom/DeleteCinemaRoomController.js";
+import GetCinemaRoomIncidentsController from "./Adapter/Http/GetCinemaRoomIncidents/GetCinemaRoomIncidentsController.js";
 import GetCinemaRoomsController from "./Adapter/Http/GetCinemaRooms/GetCinemaRoomsController.js";
 import GetCinemasController from "./Adapter/Http/GetCinemas/GetCinemasController.js";
 import GetClosestCinemaController from "./Adapter/Http/GetClosestCinema/GetClosestCinemaController.js";
 import UpdateCinemaRoomController from "./Adapter/Http/UpdateCinemaRoom/UpdateCinemaRoomController.js";
 import CreateCinemaRoomRepository from "./Adapter/Sequelize/CreateCinemaRoom/CreateCinemaRoomRepository.js";
 import DeleteCinemaRoomRepository from "./Adapter/Sequelize/DeleteCinemaRoom/DeleteCinemaRoomRepository.js";
+import GetCinemaRoomIncidentsRepository from "./Adapter/Sequelize/GetCinemaRoomIncidents/GetCinemaRoomIncidentsRepository.js";
 import GetCinemaRoomsRepository from "./Adapter/Sequelize/GetCinemaRooms/GetCinemaRoomsRepository.js";
 import GetCinemasRepository from "./Adapter/Sequelize/GetCinemas/GetCinemasRepository.js";
 import GetSequelizeClosestCinemaRepository from "./Adapter/Sequelize/GetClosestCinema/GetClosestCinemaRepository.js";
@@ -16,6 +18,7 @@ import ContactCinemaMailerRepository from "./Adapter/Smtp/ContactCinema/ContactC
 import ContactCinemaService from "./UseCase/ContactCinema/ContactCinemaService.js";
 import CreateCinemaRoomService from "./UseCase/CreateCinemaRoom/CreateCinemaRoomService.js";
 import DeleteCinemaRoomService from "./UseCase/DeleteCinemaRoom/DeleteCinemaRoomService.js";
+import GetCinemaRoomIncidentsService from "./UseCase/GetCinemaRoomIncidents/GetCinemaRoomIncidentsService.js";
 import GetCinemaRoomsService from "./UseCase/GetCinemaRooms/GetCinemaRoomsService.js";
 import GetCinemasService from "./UseCase/GetCinemas/GetCinemasService.js";
 import GetClosestCinemaService from "./UseCase/GetClosestCinema/GetClosestCinemaService.js";
@@ -163,6 +166,21 @@ export const loadCinemaRoutes = (app) => {
 			}
 
 			res.status(code).json(fileredResponse);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.get("/api/v1/cinemas/rooms/incidents", async (req, res) => {
+		try {
+			if (!req.me || req.me.role !== "employee") {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new GetCinemaRoomIncidentsController(null, new GetCinemaRoomIncidentsService(new GetCinemaRoomIncidentsRepository()));
+			const response = await controller.handle(req.query);
+			res.status(200).json(response);
 		} catch (err) {
 			console.error(err);
 			res.status(500).json({ error: true });

@@ -1,6 +1,7 @@
 import { DataTypes } from "@sequelize/core";
 
 import { SequelizeFactory } from "../../../Common/Utils/sequelize.js";
+import CinemaRoomIncidentModel from "./CinemaRoomIncidentModel.js";
 import CinemaRoomModel from "./CinemaRoomModel.js";
 
 const model = SequelizeFactory.getInstance()
@@ -34,5 +35,6 @@ const model = SequelizeFactory.getInstance()
 	);
 
 model.hasMany(CinemaRoomModel, { foreignKey: "cinemaId" });
+model.hasMany(CinemaRoomIncidentModel, { foreignKey: "cinemaId" });
 
 export default model;
