@@ -83,3 +83,12 @@ footer {
 .MuiModal-root .MuiBox-root {
 	background-color: #222 !important;
 }
+
+.modal.MuiModal-root {
+	margin: 40px;
+	overflow: auto;
+}
+
+.modal.MuiModal-root > .MuiBox-root {
+	padding: 40px;
+}
