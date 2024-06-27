@@ -1,5 +1,6 @@
 import "./env.js";
 
+import { exec } from "child_process";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 import express from "express";
@@ -88,6 +89,24 @@ import { loadUserRoutes } from "./src/User/routes.js";
 	});
 
 	app.get("/api/v1/health-check", (req, res) => {
+		res.status(200).json({ ok: true });
+	});
+
+	app.get("/api/v1/reload", (req, res) => {
+		if (!process?.env?.RELOAD_TOKEN?.length || process.env.RELOAD_TOKEN !== req.query.reloadToken) {
+			return res.status(401).json({ error: true });
+		}
+		exec("cd /home/markomilicevicfr/prod/ && git stash && git pull --rebase && git stash apply && sudo reboot", (error, stdout, stderr) => {
+			if (error) {
+				console.error(`Reload failed: ${error.message}`);
+				return;
+			}
+			if (stderr) {
+				console.error(`Stderror: ${stderr}`);
+				return;
+			}
+			console.log(`Stdout: ${stdout}`);
+		});
 		res.status(200).json({ ok: true });
 	});
 

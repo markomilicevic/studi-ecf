@@ -1,0 +1,49 @@
+version: "3.8"
+
+services:
+    database:
+        image: mariadb:latest
+        volumes:
+            - ./database/init.sql:/docker-entrypoint-initdb.d/1.sql
+        environment:
+            MYSQL_ROOT_PASSWORD: rootpassword
+            MYSQL_DATABASE: cinephoria
+            MYSQL_USER: myuser
+            MYSQL_PASSWORD: mypassword
+        ports:
+            - "3306:3306"
+
+    analytics:
+        image: elasticsearch:8.14.0
+        ports:
+            - 9200:9200
+            - 9300:9300
+        environment:
+            discovery.type: single-node
+            xpack.security.enabled: 'false'
+
+    analytics-init:
+        build: analytics
+        links:
+            - analytics
+        depends_on:
+            - analytics
+
+    http:
+        image: nginx:latest
+        volumes:
+            - ./website/build/:/var/www/website
+            - ./static/:/var/www/static
+            - ./http/nginx.conf:/etc/nginx/nginx.conf
+            - ./certbot/conf/:/etc/nginx/ssl
+        ports:
+            - "80:80"
+            - "443:443"
+        extra_hosts:
+            - "host.docker.internal:host-gateway"
+
+    certbot:
+        image: certbot/certbot:latest
+        volumes:
+            - ./certbot/www/:/var/www/certbot/:rw
+            - ./certbot/conf/:/etc/letsencrypt/:rw
