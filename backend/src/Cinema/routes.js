@@ -3,6 +3,7 @@ import ContactCinemaController from "./Adapter/Http/ContactCinema/ContactCinemaC
 import CreateCinemaRoomController from "./Adapter/Http/CreateCinemaRoom/CreateCinemaRoomController.js";
 import CreateCinemaRoomIncidentController from "./Adapter/Http/CreateCinemaRoomIncident/CreateCinemaRoomIncidentController.js";
 import DeleteCinemaRoomController from "./Adapter/Http/DeleteCinemaRoom/DeleteCinemaRoomController.js";
+import DeleteCinemaRoomIncidentController from "./Adapter/Http/DeleteCinemaRoomIncident/DeleteCinemaRoomIncidentController.js";
 import GetCinemaRoomIncidentController from "./Adapter/Http/GetCinemaRoomIncident/GetCinemaRoomIncidentController.js";
 import GetCinemaRoomIncidentsController from "./Adapter/Http/GetCinemaRoomIncidents/GetCinemaRoomIncidentsController.js";
 import GetCinemaRoomsController from "./Adapter/Http/GetCinemaRooms/GetCinemaRoomsController.js";
@@ -13,6 +14,7 @@ import UpdateCinemaRoomIncidentController from "./Adapter/Http/UpdateCinemaRoomI
 import CreateCinemaRoomRepository from "./Adapter/Sequelize/CreateCinemaRoom/CreateCinemaRoomRepository.js";
 import CreateCinemaRoomIncidentRepository from "./Adapter/Sequelize/CreateCinemaRoomIncident/CreateCinemaRoomIncidentRepository.js";
 import DeleteCinemaRoomRepository from "./Adapter/Sequelize/DeleteCinemaRoom/DeleteCinemaRoomRepository.js";
+import DeleteCinemaRoomIncidentRepository from "./Adapter/Sequelize/DeleteCinemaRoomIncident/DeleteCinemaRoomIncidentRepository.js";
 import GetCinemaRoomIncidentRepository from "./Adapter/Sequelize/GetCinemaRoomIncident/GetCinemaRoomIncidentRepository.js";
 import GetCinemaRoomIncidentsRepository from "./Adapter/Sequelize/GetCinemaRoomIncidents/GetCinemaRoomIncidentsRepository.js";
 import GetCinemaRoomsRepository from "./Adapter/Sequelize/GetCinemaRooms/GetCinemaRoomsRepository.js";
@@ -25,6 +27,7 @@ import ContactCinemaService from "./UseCase/ContactCinema/ContactCinemaService.j
 import CreateCinemaRoomService from "./UseCase/CreateCinemaRoom/CreateCinemaRoomService.js";
 import CreateCinemaRoomIncidentService from "./UseCase/CreateCinemaRoomIncident/CreateCinemaRoomIncidentService.js";
 import DeleteCinemaRoomService from "./UseCase/DeleteCinemaRoom/DeleteCinemaRoomService.js";
+import DeleteCinemaRoomIncidentService from "./UseCase/DeleteCinemaRoomIncident/DeleteCinemaRoomIncidentService.js";
 import GetCinemaRoomIncidentService from "./UseCase/GetCinemaRoomIncident/GetCinemaRoomIncidentService.js";
 import GetCinemaRoomIncidentsService from "./UseCase/GetCinemaRoomIncidents/GetCinemaRoomIncidentsService.js";
 import GetCinemaRoomsService from "./UseCase/GetCinemaRooms/GetCinemaRoomsService.js";
@@ -255,6 +258,32 @@ export const loadCinemaRoutes = (app) => {
 			const response = await controller.handle(req.body);
 
 			let code = 201; // Created
+			if (response.status === "USER_ERRORS") {
+				code = 400; // Bad request
+			}
+
+			res.status(code).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.delete("/api/v1/cinemas/rooms/incidents/:cinemaRoomIncidentId", async (req, res) => {
+		try {
+			if (!req.me || req.me.role !== "employee") {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new DeleteCinemaRoomIncidentController(
+				null,
+				new DeleteCinemaRoomIncidentService(new DeleteCinemaRoomIncidentRepository())
+			);
+			const response = await controller.handle({
+				cinemaRoomIncidentId: req.params.cinemaRoomIncidentId,
+			});
+
+			let code = 204; // No content
 			if (response.status === "USER_ERRORS") {
 				code = 400; // Bad request
 			}
