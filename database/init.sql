@@ -319,6 +319,36 @@ VALUES
 		NOW()
 	);
 
+CREATE TABLE cinemas_rooms_incidents (
+	cinemaRoomIncidentId UUID PRIMARY KEY,
+	cinemaRoomId UUID NOT NULL,
+	cinemaId UUID NOT NULL,
+	incident TEXT NOT NULL,
+	createdAt DATETIME NOT NULL,
+	updatedAt DATETIME DEFAULT NULL,
+	deletedAt DATETIME DEFAULT NULL,
+	unarchived BOOLEAN GENERATED ALWAYS AS (IF(deletedAt IS NULL, 1, NULL)) VIRTUAL,
+	UNIQUE KEY (cinemaRoomId, unarchived),
+	FOREIGN KEY (cinemaRoomId) REFERENCES cinemas_rooms(cinemaRoomId),
+	FOREIGN KEY (cinemaId) REFERENCES cinemas(cinemaId)
+);
+
+INSERT INTO
+	cinemas_rooms_incidents (
+		cinemaRoomIncidentId,
+		cinemaRoomId,
+		cinemaId,
+		incident,
+		createdAt
+	)
+VALUES
+	(
+		'dc395642-4732-4040-bee9-37d6a54a9f37',
+		'22c65b73-c309-4a4b-84fa-d0942ee76ba4',
+		'c92c5a2b-3deb-4e0c-912f-dc8434fa2873',
+		"Les places suivantes nécessitent un nettoyage : 2, 3 et 6",
+		NOW()
+	);
 
 CREATE TABLE sessions (
 	sessionId UUID PRIMARY KEY,
