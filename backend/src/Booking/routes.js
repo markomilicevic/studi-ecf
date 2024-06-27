@@ -1,7 +1,10 @@
 import BookingTicketsRepository from "./Adapter/ElasticSearch/Book/BookingTicketsRepository.js";
 import BookController from "./Adapter/Http/Book/BookController.js";
+import GetBookingAccessController from "./Adapter/Http/GetBookingAccess/GetBookingAccessController.js";
+import GetBookingAccessDetailsController from "./Adapter/Http/GetBookingAccessDetails/GetBookingAccessDetailsController.js";
 import GetBookingOrdersController from "./Adapter/Http/GetBookingOrders/GetBookingOrdersController.js";
 import VerifyBookingController from "./Adapter/Http/VerifyBooking/VerifyBookingController.js";
+import BookingAccessJwtRepository from "./Adapter/Jwt/BookingAccessJwtRepository.js";
 import BookingRepository from "./Adapter/Sequelize/Book/BookingRepository.js";
 import BookingSessionRepository from "./Adapter/Sequelize/Book/BookingSessionRepository.js";
 import BookingSessionReservedPlacementRepository from "./Adapter/Sequelize/Book/BookingSessionReservedPlacementRepository.js";
@@ -9,11 +12,16 @@ import BookingValidatorCinemasRepository from "./Adapter/Sequelize/BookingValida
 import BookingValidatorPricesRepository from "./Adapter/Sequelize/BookingValidator/BookingValidatorPricesRepository.js";
 import BookingValidatorSessionRepository from "./Adapter/Sequelize/BookingValidator/BookingValidatorSessionRepository.js";
 import BookingValidatorSessionReservedPlacementRepository from "./Adapter/Sequelize/BookingValidator/BookingValidatorSessionReservedPlacementRepository.js";
+import GetBookingAccessBookingRepository from "./Adapter/Sequelize/GetBookingAccess/GetBookingAccessBookingRepository.js";
+import GetBookingAccessDetailsBookingRepository from "./Adapter/Sequelize/GetBookingAccessDetails/GetBookingAccessDetailsBookingRepository.js";
+import GetBookingAccessDetailsSessionReservedPlacementRepository from "./Adapter/Sequelize/GetBookingAccessDetails/GetBookingAccessDetailsSessionReservedPlacementRepository.js";
 import GetBookingMovieCommentsRepository from "./Adapter/Sequelize/GetBookingOrders/GetBookingMovieCommentsRepository.js";
 import GetBookingMovieRatingsRepository from "./Adapter/Sequelize/GetBookingOrders/GetBookingMovieRatingsRepository.js";
 import GetBookingOrdersRepository from "./Adapter/Sequelize/GetBookingOrders/GetBookingOrdersRepository.js";
 import GetBookingSessionReservedPlacementRepository from "./Adapter/Sequelize/GetBookingOrders/GetBookingSessionReservedPlacementRepository.js";
 import BookService from "./UseCase/Book/BookService.js";
+import GetBookingAccessService from "./UseCase/GetBookingAccess/GetBookingAccessService.js";
+import GetBookingAccessDetailsService from "./UseCase/GetBookingAccessDetails/GetBookingAccessDetailsService.js";
 import GetBookingOrdersService from "./UseCase/GetBookingOrders/GetBookingOrdersService.js";
 import BookingValidator from "./Validator/BookingValidator.js";
 
@@ -93,6 +101,59 @@ export const loadBookingRoutes = (app) => {
 			);
 			const response = await controller.handle({
 				...req.query,
+				userId: req.me.userId,
+			});
+			res.status(200).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.get("/api/v1/booking/accesses/:code", async (req, res) => {
+		try {
+			const controller = new GetBookingAccessDetailsController(
+				null,
+				new GetBookingAccessDetailsService(
+					new BookingAccessJwtRepository(),
+					new GetBookingAccessDetailsBookingRepository(),
+					new GetBookingAccessDetailsSessionReservedPlacementRepository()
+				)
+			);
+			const response = await controller.handle({
+				code: req.params.code,
+			});
+
+			let code = 200; // OK
+			let fileredResponse = {
+				...response,
+			};
+			if (response.status === "USER_ERRORS") {
+				code = 400; // Bad request
+				fileredResponse = {
+					status: response.status,
+					errors: response.errors,
+				};
+			}
+			res.status(code).json(fileredResponse);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	app.get("/api/v1/booking/:bookingId/access", async (req, res) => {
+		try {
+			if (!req.me) {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new GetBookingAccessController(
+				null,
+				new GetBookingAccessService(new GetBookingAccessBookingRepository(), new BookingAccessJwtRepository())
+			);
+			const response = await controller.handle({
+				bookingId: req.params.bookingId,
 				userId: req.me.userId,
 			});
 			res.status(200).json(response);
