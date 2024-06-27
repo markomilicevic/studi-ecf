@@ -1,0 +1,21 @@
+{
+	"name": "electron",
+	"version": "1.0.0",
+	"scripts": {
+		"electron": "node --experimental-vm-modules ./node_modules/electron/cli.js ."
+	},
+	"main": "electron.js",
+	"build": {
+		"appId": "fr.markomilicevic.studi-ecf.desktop",
+		"productName": "Cinéphoria",
+		"directories": {
+			"output": "dist"
+		}
+	},
+	"type": "module",
+	"devDependencies": {
+		"electron": "^31.0.2",
+		"electron-builder": "^24.13.3"
+	},
+	"repository": "https://github.com/markomilicevic/studi-ecf"
+}
