@@ -1,6 +1,7 @@
 import GetGeoJsClosestCinemaRepository from "./Adapter/GeoJs/GetClosestCinema/GetClosestCinemaRepository.js";
 import ContactCinemaController from "./Adapter/Http/ContactCinema/ContactCinemaController.js";
 import CreateCinemaRoomController from "./Adapter/Http/CreateCinemaRoom/CreateCinemaRoomController.js";
+import CreateCinemaRoomIncidentController from "./Adapter/Http/CreateCinemaRoomIncident/CreateCinemaRoomIncidentController.js";
 import DeleteCinemaRoomController from "./Adapter/Http/DeleteCinemaRoom/DeleteCinemaRoomController.js";
 import GetCinemaRoomIncidentController from "./Adapter/Http/GetCinemaRoomIncident/GetCinemaRoomIncidentController.js";
 import GetCinemaRoomIncidentsController from "./Adapter/Http/GetCinemaRoomIncidents/GetCinemaRoomIncidentsController.js";
@@ -10,6 +11,7 @@ import GetClosestCinemaController from "./Adapter/Http/GetClosestCinema/GetClose
 import UpdateCinemaRoomController from "./Adapter/Http/UpdateCinemaRoom/UpdateCinemaRoomController.js";
 import UpdateCinemaRoomIncidentController from "./Adapter/Http/UpdateCinemaRoomIncident/UpdateCinemaRoomIncidentController.js";
 import CreateCinemaRoomRepository from "./Adapter/Sequelize/CreateCinemaRoom/CreateCinemaRoomRepository.js";
+import CreateCinemaRoomIncidentRepository from "./Adapter/Sequelize/CreateCinemaRoomIncident/CreateCinemaRoomIncidentRepository.js";
 import DeleteCinemaRoomRepository from "./Adapter/Sequelize/DeleteCinemaRoom/DeleteCinemaRoomRepository.js";
 import GetCinemaRoomIncidentRepository from "./Adapter/Sequelize/GetCinemaRoomIncident/GetCinemaRoomIncidentRepository.js";
 import GetCinemaRoomIncidentsRepository from "./Adapter/Sequelize/GetCinemaRoomIncidents/GetCinemaRoomIncidentsRepository.js";
@@ -21,6 +23,7 @@ import UpdateCinemaRoomIncidentRepository from "./Adapter/Sequelize/UpdateCinema
 import ContactCinemaMailerRepository from "./Adapter/Smtp/ContactCinema/ContactCinemaMailerRepository.js";
 import ContactCinemaService from "./UseCase/ContactCinema/ContactCinemaService.js";
 import CreateCinemaRoomService from "./UseCase/CreateCinemaRoom/CreateCinemaRoomService.js";
+import CreateCinemaRoomIncidentService from "./UseCase/CreateCinemaRoomIncident/CreateCinemaRoomIncidentService.js";
 import DeleteCinemaRoomService from "./UseCase/DeleteCinemaRoom/DeleteCinemaRoomService.js";
 import GetCinemaRoomIncidentService from "./UseCase/GetCinemaRoomIncident/GetCinemaRoomIncidentService.js";
 import GetCinemaRoomIncidentsService from "./UseCase/GetCinemaRoomIncidents/GetCinemaRoomIncidentsService.js";
@@ -227,6 +230,31 @@ export const loadCinemaRoutes = (app) => {
 			});
 
 			let code = 204; // No content
+			if (response.status === "USER_ERRORS") {
+				code = 400; // Bad request
+			}
+
+			res.status(code).json(response);
+		} catch (err) {
+			console.error(err);
+			res.status(500).json({ error: true });
+		}
+	});
+
+	
+	app.post("/api/v1/cinemas/rooms/incidents", async (req, res) => {
+		try {
+			if (!req.me || req.me.role !== "employee") {
+				return res.status(401).json({ error: true });
+			}
+
+			const controller = new CreateCinemaRoomIncidentController(
+				null,
+				new CreateCinemaRoomIncidentService(new CreateCinemaRoomIncidentRepository())
+			);
+			const response = await controller.handle(req.body);
+
+			let code = 201; // Created
 			if (response.status === "USER_ERRORS") {
 				code = 400; // Bad request
 			}
