@@ -31,7 +31,11 @@ export default function Footer() {
 				&copy; {new Date().getFullYear()} Marko Milicevic - Tous droits réservés -{" "}
 				<Link to="/tos" data-testid="footer-link-tos">
 					<u>Conditions Générales d'Utilisation</u>
-				</Link>
+				</Link>{" "}
+				-{" "}
+				<a href="https://github.com/markomilicevic/studi-ecf" target="_blank" rel="noreferrer">
+					<u>Code source</u>
+				</a>
 			</div>
 		</footer>
 	);
