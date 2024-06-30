@@ -139,7 +139,7 @@ export default function SignupForm({ onUserCreated }) {
 					{...register("email", { required: true, pattern: /^.+@.+$/ })}
 					data-testid="signup-form-email-field"
 					error={!!errors.email}
-					helperText={errors.email?.message}
+					helpertext={errors.email?.message}
 				/>
 				<TextField
 					required
@@ -149,7 +149,7 @@ export default function SignupForm({ onUserCreated }) {
 					{...register("password", { required: true })}
 					data-testid="signup-form-password-field"
 					error={!!errors.password}
-					helperText={errors.password?.message}
+					helpertext={errors.password?.message}
 				/>
 				<TextField
 					required
@@ -159,7 +159,7 @@ export default function SignupForm({ onUserCreated }) {
 					{...register("passwordConfirm", { required: true })}
 					data-testid="signup-form-confirm-password-field"
 					error={!!errors.passwordConfirm}
-					helperText={errors.passwordConfirm?.message}
+					helpertext={errors.passwordConfirm?.message}
 				/>
 				<TextField
 					required
@@ -169,7 +169,7 @@ export default function SignupForm({ onUserCreated }) {
 					{...register("lastName", { required: true })}
 					data-testid="signup-form-last-name-field"
 					error={!!errors.lastName}
-					helperText={errors.lastName?.message}
+					helpertext={errors.lastName?.message}
 				/>
 				<TextField
 					required
@@ -179,7 +179,7 @@ export default function SignupForm({ onUserCreated }) {
 					{...register("firstName", { required: true })}
 					data-testid="signup-form-first-name-field"
 					error={!!errors.firstName}
-					helperText={errors.firstName?.message}
+					helpertext={errors.firstName?.message}
 				/>
 				<TextField
 					required
@@ -189,7 +189,7 @@ export default function SignupForm({ onUserCreated }) {
 					{...register("userName", { required: true })}
 					data-testid="signup-form-user-name-field"
 					error={!!errors.userName}
-					helperText={errors.userName?.message}
+					helpertext={errors.userName?.message}
 				/>
 				<Button
 					variant="contained"

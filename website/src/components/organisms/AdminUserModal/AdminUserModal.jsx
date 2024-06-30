@@ -171,7 +171,7 @@ export default function AdminUserModal({ role, user = null, onClose }) {
 						type="text"
 						{...register("email", { required: true, pattern: /^.+@.+$/ })}
 						error={!!errors.email}
-						helperText={errors.email?.message}
+						helpertext={errors.email?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -181,7 +181,7 @@ export default function AdminUserModal({ role, user = null, onClose }) {
 						type="password"
 						{...register("password", { required: !user })}
 						error={!!errors.password}
-						helperText={errors.password?.message}
+						helpertext={errors.password?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -191,7 +191,7 @@ export default function AdminUserModal({ role, user = null, onClose }) {
 						type="password"
 						{...register("passwordConfirm", { required: !user })}
 						error={!!errors.passwordConfirm}
-						helperText={errors.passwordConfirm?.message}
+						helpertext={errors.passwordConfirm?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -201,7 +201,7 @@ export default function AdminUserModal({ role, user = null, onClose }) {
 						type="text"
 						{...register("lastName", { required: true })}
 						error={!!errors.lastName}
-						helperText={errors.lastName?.message}
+						helpertext={errors.lastName?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -211,7 +211,7 @@ export default function AdminUserModal({ role, user = null, onClose }) {
 						type="text"
 						{...register("firstName", { required: true })}
 						error={!!errors.firstName}
-						helperText={errors.firstName?.message}
+						helpertext={errors.firstName?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -221,7 +221,7 @@ export default function AdminUserModal({ role, user = null, onClose }) {
 						type="text"
 						{...register("userName", { required: true })}
 						error={!!errors.userName}
-						helperText={errors.userName?.message}
+						helpertext={errors.userName?.message}
 						style={{ width: "100%" }}
 					/>
 

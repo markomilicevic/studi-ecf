@@ -34,7 +34,7 @@ export default function Placement({ placeNumber, isReservedPlace, isDisabledPlac
 							sx={{ "& .MuiSvgIcon-root": { fontSize: 28 } }}
 						/>
 					</p>
-					<p>{isDisabledPlace && <div>♿</div>}</p>
+					<div>{isDisabledPlace && <div>♿</div>}</div>
 				</label>
 			)}
 		</div>

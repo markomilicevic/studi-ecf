@@ -6,6 +6,10 @@ export default function Footer() {
 				<a href="/tos" target="_blank" data-testid="footer-link-tos">
 					<u>Conditions Générales d'Utilisation</u>
 				</a>
+				-{" "}
+				<a href="https://github.com/markomilicevic/studi-ecf" target="_blank" rel="noreferrer">
+					<u>Code source</u>
+				</a>
 			</div>
 		</footer>
 	);

@@ -21,7 +21,7 @@ export default function CommentList({ movieId }) {
 		data: commentsData,
 		error: commentsError,
 		isLoading: commentsIsLoading,
-	} = useQuery("user-orders", () => retrieveComments({ movieId, currentPage, perPage: 5 }));
+	} = useQuery(`user-orders-${movieId}-${currentPage}`, () => retrieveComments({ movieId, currentPage, perPage: 10 }));
 
 	if (commentsIsLoading) {
 		return <div>Loading comments</div>;

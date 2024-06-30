@@ -48,7 +48,7 @@ export default function MovieModal({ movie, onClose }) {
 	const { countryCode, setCountryCode, setCinema } = useContext(CurrentCinemaContext);
 
 	const { data: cinemasData, error: cinemasError, isLoading: cinemasIsLoading } = useQuery("movie-modal-cinemas", retrieveCinemas);
-	const { data: sessionsData, refetch: sessionsRefetch } = useQuery("movie-modal-sessions", () =>
+	const { data: sessionsData, refetch: sessionsRefetch } = useQuery(`movie-modal-sessions-${preBooking.countryCode}-${preBooking.movie?.movieId}`, () =>
 		retrieveSessions({
 			countryCode: preBooking.countryCode,
 			movieId: preBooking.movie?.movieId,
@@ -107,7 +107,7 @@ export default function MovieModal({ movie, onClose }) {
 			<Grid container spacing={5}>
 				<Grid item xs={12} md={6}>
 					<h2 style={{ paddingBottom: 20 }}>{movie.title}</h2>
-					{movie.rating && (
+					{!!movie.rating && (
 						<p style={{ paddingBottom: 20 }}>
 							Note : <strong>{movie.rating} sur 5</strong>
 						</p>

@@ -30,7 +30,8 @@ export default function DailySessionList({ withCinemaList = false, firstDayDate,
 								data-testid="daily-session-list-select-session"
 							>
 								<u>
-									{moment(session.startDate).format("LLLL")} - {session.cinemaName}
+									{moment(session.startDate).format("LLLL")} - {session.cinemaName} ({session.qualityName} - {session.priceValue}{" "}
+									{session.priceUnit} / place)
 								</u>
 							</a>
 						</ol>
@@ -47,7 +48,11 @@ export default function DailySessionList({ withCinemaList = false, firstDayDate,
 							value={session.sessionId}
 							checked={session.sessionId === selectedSession?.sessionId}
 							control={<Radio />}
-							label={moment(session.startDate).format("LLLL")}
+							label={
+								<span>
+									{moment(session.startDate).format("LLLL")} ({session.qualityName} - {session.priceValue} {session.priceUnit} / place)
+								</span>
+							}
 							onChange={(event) => {
 								if (event.target.checked) {
 									setSelectedSession(session);
