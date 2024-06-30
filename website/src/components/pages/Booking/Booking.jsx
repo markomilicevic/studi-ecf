@@ -18,6 +18,19 @@ import { groupSessionsByDay } from "services/utils/sessions";
 // TODO: Adapt this to the P95 of number of places by booking
 const DEFAULT_STANDART_PLACES_NUMBER = 2;
 
+const DEFAULT_BOOKING = {
+	cinema: null,
+	movie: null,
+	placements: {
+		totalPlacesNumber: DEFAULT_STANDART_PLACES_NUMBER,
+		standartPlacesNumber: 0,
+		disabledPlacesNumber: 0,
+		numberOfPlacesSelected: false,
+	},
+	session: null,
+	choicedPlaces: null,
+};
+
 const retrieveCinemas = async () => {
 	const response = await axios.get(`${process.env.REACT_APP_BACKEND_BASE_URL}/api/v1/cinemas`);
 	return response.data;
@@ -88,41 +101,65 @@ export default function Booking() {
 
 	const [isBookingConfirmed, setIsBookingConfirmed] = useState(false);
 
-	const [booking, setBooking] = useState({
-		cinema: null,
-		movie: null,
-		placements: {
-			totalPlacesNumber: DEFAULT_STANDART_PLACES_NUMBER,
-			standartPlacesNumber: 0,
-			disabledPlacesNumber: 0,
-			numberOfPlacesSelected: false,
-			choicedPlaces: [],
-		},
-		session: null,
-	});
+	const [booking, setBooking] = useState(DEFAULT_BOOKING);
+
+	// Tree booking object
+	const updateBooking = (newProps) => {
+		const newBooking = { ...DEFAULT_BOOKING };
+		if (typeof newProps.cinema !== "undefined") {
+			newBooking.cinema = newProps.cinema;
+		} else {
+			newBooking.cinema = booking.cinema;
+			if (typeof newProps.movie !== "undefined") {
+				newBooking.movie = newProps.movie;
+			} else {
+				newBooking.movie = booking.movie;
+				if (typeof newProps.placements !== "undefined") {
+					newBooking.placements = newProps.placements;
+				} else {
+					newBooking.placements = booking.placements;
+					if (typeof newProps.session !== "undefined") {
+						newBooking.session = newProps.session;
+					} else {
+						newBooking.session = booking.session;
+						if (typeof newProps.choicedPlaces !== "undefined") {
+							newBooking.choicedPlaces = newProps.choicedPlaces;
+						} else {
+							newBooking.choicedPlaces = booking.choicedPlaces;
+						}
+					}
+				}
+			}
+		}
+		setBooking(newBooking);
+	};
 
 	const { countryCode, setCountryCode, cinema, setCinema } = useContext(CurrentCinemaContext);
 
 	const { data: cinemasData, error: cinemasError, isLoading: cinemasIsLoading } = useQuery("cinemas", retrieveCinemas);
 	const { data: moviesData, error: moviesError, isLoading: moviesIsLoading } = useQuery("active-movies", retrieveMovies);
-	const { data: sessionsData, refetch: sessionsRefetch } = useQuery("booking-sessions", () =>
-		retrieveSessions({
-			cinemaId: booking.cinema?.cinemaId,
-			movieId: booking.movie?.movieId,
-			standartPlacesNumber: !booking.placements.numberOfPlacesSelected ? 0 : booking.placements.standartPlacesNumber,
-			disabledPlacesNumber: !booking.placements.numberOfPlacesSelected ? 0 : booking.placements.disabledPlacesNumber,
-		})
+	const { data: sessionsData, refetch: sessionsRefetch } = useQuery(
+		`booking-sessions-${booking.cinema?.cinemaI}-${booking.movie?.movieId}-${booking.placements.standartPlacesNumber}-${booking.placements.disabledPlacesNumber}`,
+		() =>
+			retrieveSessions({
+				cinemaId: booking.cinema?.cinemaId,
+				movieId: booking.movie?.movieId,
+				standartPlacesNumber: !booking.placements.numberOfPlacesSelected ? 0 : booking.placements.standartPlacesNumber,
+				disabledPlacesNumber: !booking.placements.numberOfPlacesSelected ? 0 : booking.placements.disabledPlacesNumber,
+			})
 	);
-	const { data: sessionData, refetch: sessionRefetch } = useQuery("booking-session", () =>
+	const { data: sessionData, refetch: sessionRefetch } = useQuery(`booking-session-${booking.session?.sessionId}`, () =>
 		retrieveSession({
 			sessionId: booking.session?.sessionId,
 		})
 	);
-	const { data: bookVerifyData, refetch: bookVerifyRefetch } = useQuery("booking-verify", () =>
-		retrieveBookingVerify({
-			sessionId: booking.session?.sessionId,
-			choicedPlaces: booking.placements.choicedPlaces.length === booking.placements.totalPlacesNumber ? booking.placements.choicedPlaces : 0,
-		})
+	const { data: bookVerifyData, refetch: bookVerifyRefetch } = useQuery(
+		`booking-verify-${booking.session?.sessionId}-${booking.placements.totalPlacesNumber}-${booking.choicedPlaces?.length}`,
+		() =>
+			retrieveBookingVerify({
+				sessionId: booking.session?.sessionId,
+				choicedPlaces: booking.choicedPlaces?.length === booking.placements.totalPlacesNumber ? booking.choicedPlaces : [],
+			})
 	);
 
 	const book = useMutation({
@@ -131,7 +168,7 @@ export default function Booking() {
 
 	useEffect(() => {
 		if (cinema) {
-			setBooking({ ...booking, cinema });
+			updateBooking({ cinema });
 		}
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [cinema]);
@@ -164,7 +201,6 @@ export default function Booking() {
 		}
 
 		setBooking({
-			...booking,
 			cinema: { ...cinema },
 			movie: { ...movie },
 			placements: {
@@ -207,7 +243,7 @@ export default function Booking() {
 				cinema={cinema}
 				setCinema={(cinema) => {
 					setCinema(cinema);
-					setBooking({ ...booking, movie: null });
+					updateBooking({ cinema });
 				}}
 			/>
 		</div>
@@ -218,7 +254,7 @@ export default function Booking() {
 		stepChooseMovieElm = (
 			<div>
 				<h2>Choisir le film</h2>
-				<MovieListDropdown data={moviesData?.data} movie={booking.movie} setMovie={(movie) => setBooking({ ...booking, ...{ movie } })} />
+				<MovieListDropdown data={moviesData?.data} movie={booking.movie} setMovie={(movie) => updateBooking({ movie })} />
 			</div>
 		);
 	}
@@ -232,8 +268,7 @@ export default function Booking() {
 					<PlacesNumber
 						placements={booking.placements}
 						setPlacements={(placements) => {
-							setBooking({
-								...booking,
+							updateBooking({
 								placements: {
 									...placements,
 									standartPlacesNumber: 0,
@@ -245,8 +280,7 @@ export default function Booking() {
 					<Button
 						variant="contained"
 						onClick={() => {
-							setBooking({
-								...booking,
+							updateBooking({
 								placements: {
 									...booking.placements,
 									standartPlacesNumber: booking.placements.totalPlacesNumber - booking.placements.disabledPlacesNumber,
@@ -269,11 +303,7 @@ export default function Booking() {
 			<div>
 				<h1>Choisir la scéance</h1>
 				<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
-					<WeeklySessionList
-						weeklySessions={sessionsData?.data}
-						session={booking.session}
-						setSession={(session) => setBooking({ ...booking, ...{ session } })}
-					/>
+					<WeeklySessionList weeklySessions={sessionsData?.data} session={booking.session} setSession={(session) => updateBooking({ session })} />
 				</div>
 			</div>
 		);
@@ -286,19 +316,16 @@ export default function Booking() {
 				<h2>{booking.placements.totalPlacesNumber > 1 ? "Choisir les places" : "Choisir la place"}</h2>
 				<div style={{ display: "flex", flexDirection: "column", alignItems: "center" }}>
 					<Placements
+						key={`${booking.session?.sessionId}`}
 						placementsMatrix={sessionData?.data?.placementsMatrix}
 						reservedPlacementNumbers={sessionData?.data?.reservedPlacementNumbers}
 						standartPlacesNumber={booking.placements.standartPlacesNumber}
 						disabledPlacesNumber={booking.placements.disabledPlacesNumber}
 						onChange={(placeNumber, isSelected) => {
-							setBooking({
-								...booking,
-								placements: {
-									...booking.placements,
-									choicedPlaces: isSelected
-										? [...booking.placements.choicedPlaces, placeNumber]
-										: [...booking.placements.choicedPlaces].filter((pn) => pn !== placeNumber),
-								},
+							updateBooking({
+								choicedPlaces: isSelected
+									? [...(booking.choicedPlaces || []), placeNumber]
+									: [...(booking.choicedPlaces || [])].filter((pn) => pn !== placeNumber),
 							});
 						}}
 					/>
@@ -316,7 +343,7 @@ export default function Booking() {
 				{
 					sessionId: booking.session?.sessionId,
 					movieId: booking.movie?.movieId,
-					choicedPlaces: booking.placements.choicedPlaces,
+					choicedPlaces: booking.choicedPlaces,
 					expectedTotalPriceValue: bookVerifyData.data?.totalPriceValue,
 					expectedTotalPriceUnit: bookVerifyData.data?.totalPriceUnit,
 				},
