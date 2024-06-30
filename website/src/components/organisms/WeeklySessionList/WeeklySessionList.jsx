@@ -21,7 +21,7 @@ export default function WeeklySessionList({ withCinemaList = false, weeklySessio
 					{Array(7)
 						.fill(null)
 						.map((_, index) => (
-							<ol data-testid="weekly-session-list-day" key={startIndex + index}>
+							<ol data-testid="weekly-session-list-day" key={`${startIndex + index}-${session?.sessionId}`}>
 								<DailySessionList
 									withCinemaList={withCinemaList}
 									firstDayDate={firstDayDate}

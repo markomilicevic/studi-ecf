@@ -31,6 +31,8 @@ export default class BookingValidatorSessionRepository {
 
 		const obj = new Session();
 		obj.setSessionId(session.sessionId);
+		obj.setQualityId(session.qualityId);
+		obj.setCinemaId(session.cinemas_rooms.cinemaId);
 		obj.setStartDate(session.startDate);
 		obj.setEndDate(session.endDate);
 		obj.setCinemaRoom(cr);
