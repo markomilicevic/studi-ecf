@@ -13,6 +13,7 @@ export const BannerProvider = ({ children }) => {
 				<p>
 					Vous êtes sur un site <u>factice</u> conçu dans le cadre d'un exercice
 				</p>
+				<p>Ce site n'est pas (et ne doit pas) être indexé par des moteurs de recherche</p>
 				<p>Ne saisissez pas d'information personnelle ou confidentielle</p>
 				<p>
 					Ce site se remet à zéro <u>tous les minuits</u> (UTC)
