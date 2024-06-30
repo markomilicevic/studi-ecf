@@ -175,11 +175,11 @@ export default function AdminMovieModal({ movie = null, onClose }) {
 						type="text"
 						{...register("title", { required: true })}
 						error={!!errors.title}
-						helperText={errors.title?.message}
+						helpertext={errors.title?.message}
 						style={{ width: "100%" }}
 					/>
 					<div>
-						<label for="posterId">Affiche du film :</label>
+						<label htmlFor="posterId">Affiche du film :</label>
 						<div style={{ display: "flex" }}>
 							{watch("posterId") && <img src={`${process.env.REACT_APP_STATIC_BASE_URL}/posters/${watch("posterId")}.jpg`} width="50" alt="" />}
 
@@ -200,7 +200,7 @@ export default function AdminMovieModal({ movie = null, onClose }) {
 								defaultValue={watch("genreId")}
 								{...register("genreId", { required: true })}
 								error={!!errors.genreId}
-								helperText={errors.genreId?.message}
+								helpertext={errors.genreId?.message}
 							>
 								{genresData?.data?.map((genre) => (
 									<MenuItem key={genre.genreId} value={genre.genreId}>
@@ -219,7 +219,7 @@ export default function AdminMovieModal({ movie = null, onClose }) {
 						maxRows={4}
 						{...register("description", { required: true })}
 						error={!!errors.description}
-						helperText={errors.description?.message}
+						helpertext={errors.description?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -229,7 +229,7 @@ export default function AdminMovieModal({ movie = null, onClose }) {
 						type="number"
 						{...register("minimalAge", { required: true })}
 						error={!!errors.minimalAge}
-						helperText={errors.minimalAge?.message}
+						helpertext={errors.minimalAge?.message}
 						style={{ width: "100%" }}
 					/>
 

@@ -115,7 +115,7 @@ export default function ModerationCommentList() {
 		error: commentsError,
 		isLoading: commentsIsLoading,
 		refetch: commentsRefetch,
-	} = useQuery("moderation-movies-comments", () => retrieveComments({ currentPage, perPage: 5 }));
+	} = useQuery("moderation-movies-comments", () => retrieveComments({ currentPage, perPage: 10 }));
 
 	if (commentsIsLoading) {
 		return <div>...</div>;

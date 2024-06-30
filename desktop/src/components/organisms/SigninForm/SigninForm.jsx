@@ -72,7 +72,7 @@ export default function SigninForm({ onUserAuthentified }) {
 					{...register("email", { required: true, pattern: /^.+@.+$/ })}
 					data-testid="signin-form-email-field"
 					error={!!errors.email}
-					helperText={errors.email?.message}
+					helpertext={errors.email?.message}
 				/>
 				<TextField
 					required
@@ -82,7 +82,7 @@ export default function SigninForm({ onUserAuthentified }) {
 					{...register("password", { required: true })}
 					data-testid="signin-form-password-field"
 					error={!!errors.password}
-					helperText={errors.password?.message}
+					helpertext={errors.password?.message}
 				/>
 				<Button
 					variant="contained"

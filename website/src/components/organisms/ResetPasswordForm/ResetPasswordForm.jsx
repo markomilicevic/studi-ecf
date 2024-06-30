@@ -130,7 +130,7 @@ export default function ResetPasswordForm({ resetPasswordToken, onPasswordResett
 					{...register("password", { required: true })}
 					data-testid="reset-password-form-password-field"
 					error={!!errors.password}
-					helperText={errors.password?.message}
+					helpertext={errors.password?.message}
 				/>
 
 				<TextField
@@ -141,7 +141,7 @@ export default function ResetPasswordForm({ resetPasswordToken, onPasswordResett
 					{...register("passwordConfirm", { required: true })}
 					data-testid="reset-password-new-password-confirm"
 					error={!!errors.passwordConfirm}
-					helperText={errors.passwordConfirm?.message}
+					helpertext={errors.passwordConfirm?.message}
 				/>
 				<Button
 					variant="contained"

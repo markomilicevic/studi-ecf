@@ -85,7 +85,7 @@ export default function ContactForm() {
 					{...register("subject", { required: true })}
 					data-testid="contact-form-subject-field"
 					error={!!errors.subject}
-					helperText={errors.subject?.message}
+					helpertext={errors.subject?.message}
 				/>
 
 				<TextField
@@ -97,7 +97,7 @@ export default function ContactForm() {
 					{...register("body", { required: true })}
 					data-testid="contact-form-body-field"
 					error={!!errors.body}
-					helperText={errors.body?.message}
+					helpertext={errors.body?.message}
 				/>
 
 				<Button

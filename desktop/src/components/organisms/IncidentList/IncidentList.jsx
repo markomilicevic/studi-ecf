@@ -94,7 +94,7 @@ export default function IncidentList() {
 				cinemaId: cinema?.cinemaId,
 				cinemaRoomId: cinemaRoom?.cinemaRoomId,
 				currentPage,
-				perPage: 5,
+				perPage: 10,
 			})
 	);
 

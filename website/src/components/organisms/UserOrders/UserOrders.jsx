@@ -53,7 +53,7 @@ export default function UserOrders() {
 		error: ordersError,
 		isLoading: ordersIsLoading,
 		refetch: ordersRefetch,
-	} = useQuery("user-orders", () => retrieveOrders({ currentPage, perPage: 5 }));
+	} = useQuery(`user-orders-${currentPage}`, () => retrieveOrders({ currentPage, perPage: 10 }));
 
 	if (ordersIsLoading) {
 		return <div>...</div>;
@@ -86,7 +86,7 @@ export default function UserOrders() {
 							{ordersData.data.map((order) => (
 								<StyledTableRow key={order.bookingId} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
 									<StyledTableCell component="th" scope="row">
-										{moment(order.bookingAt).format("LLL")}
+										{moment(order.bookedAt).format("LLL")}
 									</StyledTableCell>
 									<StyledTableCell>
 										<div>{order.title}</div>
