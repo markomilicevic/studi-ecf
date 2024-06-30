@@ -102,4 +102,4 @@ Votre installation local est maintenant entièrement fonctionnelle
 - [Gestion du projet](doc/project.md)
 - [Style graphique](doc/styles.pdf)
 - [Wireframes et mockups](doc/integration.md)
-- [Architecture](doc/architecture.md) (**lecture commandée**)
+- [Architecture](doc/architecture.md) (**lecture recommandée**)
