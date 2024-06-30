@@ -67,7 +67,7 @@ export default function SendResetPasswordEmailForm() {
 					{...register("email", { required: true, pattern: /^.+@.+$/ })}
 					data-testid="signup-form-email-field"
 					error={!!errors.email}
-					helperText={errors.email?.message}
+					helpertext={errors.email?.message}
 				/>
 				<Button
 					variant="contained"

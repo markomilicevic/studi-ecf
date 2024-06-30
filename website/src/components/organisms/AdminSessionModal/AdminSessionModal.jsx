@@ -158,7 +158,7 @@ export default function AdminSessionModal({ session = null, onClose }) {
 								defaultValue={watch("cinemaId")}
 								{...register("cinemaId", { required: true })}
 								error={!!errors.cinemaId}
-								helperText={errors.cinemaId?.message}
+								helpertext={errors.cinemaId?.message}
 							>
 								{cinemasData?.data?.map((cinema) => (
 									<MenuItem key={cinema.cinemaId} value={cinema.cinemaId}>
@@ -177,7 +177,7 @@ export default function AdminSessionModal({ session = null, onClose }) {
 								defaultValue={watch("cinemaRoomId")}
 								{...register("cinemaRoomId", { required: true })}
 								error={!!errors.cinemaRoomId}
-								helperText={errors.cinemaRoomId?.message}
+								helpertext={errors.cinemaRoomId?.message}
 							>
 								{cinemaRoomsData?.data?.map((cinemaRoom) => (
 									<MenuItem key={cinemaRoom.cinemaRoomId} value={cinemaRoom.cinemaRoomId}>
@@ -196,7 +196,7 @@ export default function AdminSessionModal({ session = null, onClose }) {
 								defaultValue={watch("movieId")}
 								{...register("movieId", { required: true })}
 								error={!!errors.movieId}
-								helperText={errors.movieId?.message}
+								helpertext={errors.movieId?.message}
 							>
 								{moviesData?.data?.map((movie) => (
 									<MenuItem key={movie.movieId} value={movie.movieId}>
@@ -215,7 +215,7 @@ export default function AdminSessionModal({ session = null, onClose }) {
 								defaultValue={watch("qualityId")}
 								{...register("qualityId", { required: true })}
 								error={!!errors.qualityId}
-								helperText={errors.qualityId?.message}
+								helpertext={errors.qualityId?.message}
 							>
 								{qualitiesData?.data?.map((quality) => (
 									<MenuItem key={quality.qualityId} value={quality.qualityId}>
@@ -232,7 +232,7 @@ export default function AdminSessionModal({ session = null, onClose }) {
 						type="text"
 						{...register("startDate", { required: true })}
 						error={!!errors.startDate}
-						helperText={errors.startDate?.message}
+						helpertext={errors.startDate?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -242,7 +242,7 @@ export default function AdminSessionModal({ session = null, onClose }) {
 						type="text"
 						{...register("endDate", { required: true })}
 						error={!!errors.endDate}
-						helperText={errors.endDate?.message}
+						helpertext={errors.endDate?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -252,7 +252,7 @@ export default function AdminSessionModal({ session = null, onClose }) {
 						type="number"
 						{...register("standartFreePlaces", { required: true })}
 						error={!!errors.standartFreePlaces}
-						helperText={errors.standartFreePlaces?.message}
+						helpertext={errors.standartFreePlaces?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -262,7 +262,7 @@ export default function AdminSessionModal({ session = null, onClose }) {
 						type="number"
 						{...register("disabledFreePlaces", { required: true })}
 						error={!!errors.disabledFreePlaces}
-						helperText={errors.disabledFreePlaces?.message}
+						helpertext={errors.disabledFreePlaces?.message}
 						style={{ width: "100%" }}
 					/>
 

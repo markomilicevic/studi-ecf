@@ -62,7 +62,7 @@ export default function AdminSessionList() {
 		error: sessionsError,
 		isLoading: sessionsIsLoading,
 		refetch: sessionsRefetch,
-	} = useQuery("admin-sessions", () => retrieveSessions({ currentPage, perPage: 5 }));
+	} = useQuery("admin-sessions", () => retrieveSessions({ currentPage, perPage: 10 }));
 
 	const deleteSession = useMutation({
 		mutationFn: submitDelete,
@@ -115,7 +115,7 @@ export default function AdminSessionList() {
 						</TableHead>
 						<TableBody>
 							{sessionsData.data.map((session) => (
-								<StyledTableRow key={session.sessionsId} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+								<StyledTableRow key={session.sessionId} sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
 									<StyledTableCell component="th" scope="row">
 										{moment(session.startDate).format("L HH:mm:ss")}
 									</StyledTableCell>

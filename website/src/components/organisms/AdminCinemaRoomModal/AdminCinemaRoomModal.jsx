@@ -122,7 +122,7 @@ export default function AdminCinemaRoomModal({ cinemaRoom = null, onClose }) {
 								defaultValue={watch("cinemaId")}
 								{...register("cinemaId", { required: true })}
 								error={!!errors.cinemaId}
-								helperText={errors.cinemaId?.message}
+								helpertext={errors.cinemaId?.message}
 							>
 								{cinemasData?.data?.map((cinema) => (
 									<MenuItem key={cinema.cinemaId} value={cinema.cinemaId}>
@@ -141,7 +141,7 @@ export default function AdminCinemaRoomModal({ cinemaRoom = null, onClose }) {
 								defaultValue={watch("qualityId")}
 								{...register("qualityId", { required: true })}
 								error={!!errors.qualityId}
-								helperText={errors.qualityId?.message}
+								helpertext={errors.qualityId?.message}
 							>
 								{qualitiesData?.data?.map((quality) => (
 									<MenuItem key={quality.qualityId} value={quality.qualityId}>
@@ -158,7 +158,7 @@ export default function AdminCinemaRoomModal({ cinemaRoom = null, onClose }) {
 						type="number"
 						{...register("roomNumber", { required: true })}
 						error={!!errors.roomNumber}
-						helperText={errors.roomNumber?.message}
+						helpertext={errors.roomNumber?.message}
 						style={{ width: "100%" }}
 					/>
 
@@ -170,7 +170,7 @@ export default function AdminCinemaRoomModal({ cinemaRoom = null, onClose }) {
 						maxRows={4}
 						{...register("placementsMatrix", { required: true })}
 						error={!!errors.placementsMatrix}
-						helperText={errors.placementsMatrix?.message}
+						helpertext={errors.placementsMatrix?.message}
 						style={{ width: "100%" }}
 					/>
 

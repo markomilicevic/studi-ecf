@@ -60,7 +60,7 @@ export default function UserOrders() {
 		data: ordersData,
 		error: ordersError,
 		isLoading: ordersIsLoading,
-	} = useQuery("user-orders", () => retrieveOrders({ startDay: new Date().toISOString(), currentPage, perPage: 5 }));
+	} = useQuery("user-orders", () => retrieveOrders({ startDay: new Date().toISOString(), currentPage, perPage: 10 }));
 
 	if (ordersIsLoading) {
 		return <div>...</div>;
