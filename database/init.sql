@@ -402,8 +402,8 @@ VALUES
 		'25d69489-4384-4494-9852-0c63feca08a2',
 		NOW() + INTERVAL 6 HOUR,
 		NOW() + INTERVAL 8 HOUR,
-		100,
-		10,
+		9,
+		3,
 		NOW()
 	),
 	(
@@ -414,8 +414,8 @@ VALUES
 		'25d69489-4384-4494-9852-0c63feca08a2',
 		NOW() + INTERVAL 6 HOUR,
 		NOW() + INTERVAL 8 HOUR,
-		100,
-		10,
+		9,
+		3,
 		NOW()
 	),
 	(
@@ -426,8 +426,8 @@ VALUES
 		'54671b5f-75a9-4742-82c7-56cf2ffbc343',
 		NOW() + INTERVAL 9 HOUR,
 		NOW() + INTERVAL 11 HOUR,
-		2,
-		1,
+		9,
+		3,
 		NOW()
 	),
 	(
@@ -438,8 +438,8 @@ VALUES
 		'25d69489-4384-4494-9852-0c63feca08a2',
 		NOW() + INTERVAL 25 HOUR,
 		NOW() + INTERVAL 27 HOUR,
-		100,
-		10,
+		2,
+		2,
 		NOW()
 	),
 	(
@@ -450,8 +450,8 @@ VALUES
 		'25d69489-4384-4494-9852-0c63feca08a2',
 		NOW() + INTERVAL 5 HOUR,
 		NOW() + INTERVAL 7 HOUR,
-		100,
-		10,
+		9,
+		3,
 		NOW()
 	),
 	(
@@ -462,8 +462,8 @@ VALUES
 		'9298d94f-9186-4f50-957c-84719d96b2cc',
 		NOW() + INTERVAL 9 DAY,
 		NOW() + INTERVAL 9 DAY + INTERVAL 2 HOUR,
-		100,
-		10,
+		2,
+		2,
 		NOW()
 	),
 	(
