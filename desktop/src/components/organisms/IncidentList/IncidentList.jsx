@@ -113,14 +113,23 @@ export default function IncidentList() {
 				cinemasError={cinemasError}
 				cinemasIsLoading={cinemasIsLoading}
 				countryCode={countryCode}
-				setCountryCode={setCountryCode}
+				setCountryCode={(countryCode) => {
+					setCountryCode(countryCode);
+					cinemaRoomIncidentsRefetch();
+				}}
 				cinema={cinema}
-				setCinema={setCinema}
+				setCinema={(cinema) => {
+					setCinema(cinema);
+					cinemaRoomIncidentsRefetch();
+				}}
 				cinemaRoomsData={cinemaRoomsData?.data}
 				cinemaRoomsError={cinemaRoomsError}
 				cinemaRoomsIsLoading={cinemaRoomsIsLoading}
 				cinemaRoom={cinemaRoom}
-				setCinemaRoom={setCinemaRoom}
+				setCinemaRoom={(cinemaRoom) => {
+					setCinemaRoom(cinemaRoom);
+					cinemaRoomIncidentsRefetch();
+				}}
 			/>
 
 			<div style={{ display: "flex", justifyContent: "end", paddingTop: 20 }}>
@@ -161,7 +170,9 @@ export default function IncidentList() {
 											{incident.roomNumber}
 										</StyledTableCell>
 										<StyledTableCell component="th" scope="row">
-											<pre>{incident.incident}</pre>
+											{incident.incident?.split("\n").map((line, index) => (
+												<p key={index}>{line}</p>
+											))}
 										</StyledTableCell>
 										<StyledTableCell component="th" scope="row">
 											{moment(incident.lastModifiedAt).format("LLL")}
@@ -229,7 +240,6 @@ export default function IncidentList() {
 							setIncidentModalOpened(false);
 							setSelectedIncident(null);
 							cinemaRoomIncidentsRefetch();
-							enqueueSnackbar("Incident ajouté/mis à jour");
 						}}
 					/>
 				)}

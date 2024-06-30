@@ -67,8 +67,8 @@ export default function IncidentModal({
 	} = useForm({
 		defaultValues: {
 			cinemaRoomIncidentId: incident?.cinemaRoomIncidentId || null,
-			cinemaId: incident?.cinemaId || null,
-			cinemaRoomId: incident?.cinemaRoomId || null,
+			cinemaId: incident?.cinemaId || cinema?.cinemaId || null,
+			cinemaRoomId: incident?.cinemaRoomId || cinemaRoom?.cinemaRoomId || null,
 			incident: incident?.incident || "",
 		},
 	});
@@ -77,7 +77,7 @@ export default function IncidentModal({
 
 	const { data: cinemaRoomIncidentData, refetch: cinemaRoomIncidentRefetch } = useQuery(`cinemas-room-incident-${cinemaRoomId}`, () =>
 		retrieveCinemaRoomIncident({
-			cinemaRoomId: !incident ? cinemaRoomId : undefined,
+			cinemaRoomId: !incident ? cinemaRoom?.cinemaRoomId : undefined,
 		})
 	);
 
