@@ -107,6 +107,8 @@ install-prod:
 	crontab -l > mycron || true
 	# Echo new cron
 	echo "0 0 * * * sudo reboot" >> mycron
+	# Renew Letsencrypt certificates every 1st day of months
+	echo "0 0 1 * * sudo docker-compose -f /home/markomilicevicfr/prod/docker-compose-prod.yml run certbot renew" >> mycron
 	# Install new cron file
 	crontab mycron
 	# Cleanup
