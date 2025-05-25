@@ -52,7 +52,31 @@ Il a été décidé d'utiliser la base de donnée relationnelle MariaDB car :
 
 #### Modéle
 
-![Database](./img/database.png)
+##### MCD (Modèle Conceptuel des Données)
+
+![MCD](./img/mcd.png)
+
+##### MLD (Modèle Logique des Données)
+
+![MLD](./img/mld.png)
+
+Film(<ins>identifiant</ins>, titre, description, affiche, genre, ageMinimal, coupDeCoeur, noteGlobale)
+
+Séance(<ins>identifiant</ins>, dateHeureDebutProjection, dateHeurFinProjection, nombrePlacesStandardLibres, nombrePlacesHandicapeLibres, #identifiant_Film, **#identfiant_Salle**)
+
+Salle(<ins>identifiant</ins>, numéro, dispositionDesPlaces, #identifiant_Qualité, **#identifiant_Cinama**)
+
+Qualité(<ins>identifiant</ins>, nom, prixEuros)
+
+Cinéma(<ins>identifiant</ins>, pays, adressePostale, numeroTelephone, horaires)
+
+Incident(<ins>identifiant</ins>, description, statut, **#identifiant_Salle**)
+
+Utilisateur(<ins>identifiant</ins>, role, adresseEmail, motDePasse, nom, prénom, nomUtilisateur)
+
+Réservation(<ins>identifiant</ins>, dateHeureReservation, prixTotalEuros, commentaire, statutCommentaire, note, **#identifiant_Séance**, **#identifiant_Utilisateur**)
+
+Place(<ins>identifiant</ins>, numeroPlace, **#identifiant_Reservation**)
 
 ### Base NoSQL
 
