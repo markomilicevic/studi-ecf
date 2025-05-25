@@ -14,7 +14,9 @@ services:
             - "3306:3306"
 
     analytics:
-        image: elasticsearch:8.14.0
+        # The "latest" ES version is not used here because the Backend's node client must use the same version
+        # You're free to upgrade ES, but don't forget to update the Backend's node client at the same version
+        image: elasticsearch:9.0.1
         ports:
             - 9200:9200
             - 9300:9300
