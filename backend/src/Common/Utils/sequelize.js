@@ -6,9 +6,12 @@ class SequelizeClass {
 	 * @param {object} Database config and crendentials
 	 */
 	constructor({ host, dialect, database, user, password }) {
-		this.sequelize = new Sequelize(database, user, password, {
+		this.sequelize = new Sequelize({
 			host,
 			dialect,
+			database,
+			user,
+			password
 		});
 	}
 
